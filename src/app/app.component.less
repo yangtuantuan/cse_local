@@ -1,0 +1,80 @@
+@import "ng-devui/styles-var/devui-var.less";
+
+d-layout {
+  background-color: @devui-base-bg;
+}
+
+d-aside {
+  padding-left: 1px;
+  height: calc(100vh - var(--cse-header-height) - var(--cse-foot-height));
+  .menu {
+    position: relative;
+    width: 160px;
+    height: 100%;
+  }
+
+  d-accordion-list {
+    height: calc(100vh - var(--cse-header-height) - var(--cse-foot-height));
+  }
+}
+
+d-header {
+  text-align: left;
+  height: 40px;
+  background-color: @devui-base-bg-dark;
+  position: relative;
+
+  .logo {
+    position: absolute;
+    left: 0;
+    margin-left: 20px;
+    height: 40px;
+    width: 120px;
+    color: @devui-light-text;
+    font-size: @devui-font-size-icon;
+    line-height: 40px;
+
+    .logo-devui {
+      margin-top: 7px;
+    }
+
+    .logo-devui,
+    .text {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  .search {
+    color: @devui-light-text;
+    margin-right: 40px;
+    position: absolute;
+    right: 0;
+  }
+}
+
+d-content[leftMenu] {
+  padding: 20px 20px;
+  background-color: @devui-global-bg;
+
+  d-breadcrumb {
+    margin-top: 8px;
+  }
+
+  .inner-content {
+    background-color: @devui-base-bg;
+    padding: 10px;
+    position: relative;
+    height: 100%;
+  }
+}
+
+d-content {
+  background-color: #eef0f5;
+}
+
+d-footer {
+  color: @devui-light-text;
+  background-color: @devui-base-bg-dark;
+  padding: 9px 24px;
+}

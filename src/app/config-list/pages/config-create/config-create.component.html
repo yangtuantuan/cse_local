@@ -1,0 +1,160 @@
+<div class="container">
+  <d-breadcrumb>
+    <d-breadcrumb-item>
+      <a routerLink="/kie">配置中心</a>
+    </d-breadcrumb-item>
+    <d-breadcrumb-item>
+      <span>{{ title }}</span>
+    </d-breadcrumb-item>
+  </d-breadcrumb>
+
+  <form dForm [layout]="FormLayout.Horizontal" [labelSize]="'sm'">
+    <d-form-item>
+      <d-form-label [required]="false">配置类型</d-form-label>
+      <d-form-control>{{ configType }}</d-form-control>
+    </d-form-item>
+    <d-form-item *ngIf="configType === 'app'">
+      <d-form-label [required]="false">应用</d-form-label>
+      <d-form-control>
+        <span *ngIf="appId">{{ appId }}</span>
+        <i
+          *ngIf="appId && type === 'create'"
+          class="icon icon-delete app-delete"
+          (click)="onDeleteApp()"
+        ></i>
+        <d-button *ngIf="!appId" bsStyle="common" (click)="onSelectApp()"
+          >选择应用</d-button
+        >
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [required]="true" [hasHelp]="true" helpTips="xxxxx">
+        配置项
+      </d-form-label>
+      <d-form-control>
+        <ng-container *ngIf="type === 'create'; else elseTemplate">
+          <input
+            type="text"
+            dTextInput
+            class="w-300"
+            placeholder="请输入配置项"
+            [(ngModel)]="configName"
+            [ngModelOptions]="{ standalone: true }"
+            [dValidateRules]="[
+              { required: true },
+              { whitespace: true },
+              { minlength: 1 },
+              { maxlength: 128 },
+              {
+                pattern: isAlphabetPattern,
+                message: {
+                  default:
+                    '请输入由数字/字母/下划线/中划线或小数点组成对1-128位字符'
+                }
+              }
+            ]"
+          />
+        </ng-container>
+        <ng-template #elseTemplate>
+          <span>{{ configName }}</span>
+        </ng-template>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [required]="false">标签</d-form-label>
+      <d-form-control>
+        <div class="cse-mg-bottom-sm">
+          <d-tag
+            class="cse-mg-right-xs"
+            *ngFor="let tag of tags; let i = index"
+            [tag]="tag"
+            [customViewTemplate]="customTag"
+          ></d-tag>
+          <ng-template #customTag let-tag="tag">
+            <span title="{{ tag }}">{{ tag }}</span>
+          </ng-template>
+        </div>
+        <div *ngIf="configType === 'custom' && type === 'create'">
+          <input
+            type="text"
+            dTextInput
+            class="w-300"
+            placeholder="请输入标签键"
+            [(ngModel)]="configTageKey"
+            [ngModelOptions]="{ standalone: true }"
+            [dValidateRules]="[
+            { required: true },
+            { whitespace: true },
+          ]"
+          />
+          <input
+            type="text"
+            dTextInput
+            class="w-300 cse-mg-left-xs"
+            placeholder="请输入标签值"
+            [(ngModel)]="configTageValue"
+            [ngModelOptions]="{ standalone: true }"
+            [dValidateRules]="[
+            { required: true },
+            { whitespace: true },
+          ]"
+          />
+          <d-button
+            icon="icon-add"
+            [bsStyle]="'text-dark'"
+            [bordered]="true"
+            style="vertical-align: middle"
+            (click)="onAddTage()"
+          ></d-button>
+        </div>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item>
+      <d-form-label [required]="false">配置格式</d-form-label>
+      <d-form-control>
+        <d-button-group size="md">
+          <d-button
+            *ngFor="let item of configFormatItems"
+            (click)="onConfigFormat(item.id)"
+            [bsStyle]="configFormatId === item.id ? 'primary' : 'common'"
+          >
+            {{ item.text }}
+          </d-button>
+        </d-button-group>
+      </d-form-control>
+    </d-form-item>
+    <d-form-item *ngIf="type === 'eidt'">
+      <d-form-label [required]="false">是否启用</d-form-label>
+      <d-form-control>
+        <d-toggle [checked]="status === 'enabled'"></d-toggle>
+      </d-form-control>
+    </d-form-item>
+
+    <d-form-item>
+      <d-form-label [required]="true">配置内容</d-form-label>
+      <d-form-control>
+        <ngx-monaco-editor
+          #monacoEditor
+          [options]="editorOptions"
+          [(ngModel)]="code"
+          [ngModelOptions]="{ standalone: true }"
+          style="height: 400px"
+        ></ngx-monaco-editor>
+      </d-form-control>
+    </d-form-item>
+
+    <d-form-operation class="form-operation">
+      <d-button
+        bsStyle="danger"
+        circled="true"
+        style="margin-right: 4px"
+        (click)="onSubmit()"
+        dFormSubmit
+        >Submit</d-button
+      >
+      <d-button bsStyle="common" circled="true" (click)="cancel()"
+        >Cancel</d-button
+      >
+    </d-form-operation>
+  </form>
+</div>

@@ -1,0 +1,70 @@
+<div class="title">服务列表</div>
+<div class="btn-group">
+  <d-button icon="icon-add" bsStyle="primary"> 创建微服务 </d-button>
+  <d-button icon="icon-filter" bsStyle="common"> 清理无实例版本 </d-button>
+  <d-button icon="icon-filter" bsStyle="common" (click)="deleteItem()">
+    删除
+  </d-button>
+</div>
+
+<d-data-table
+  [dataSource]="basicDataSource"
+  [tableWidthConfig]="tableWidthConfig"
+>
+  <thead dTableHead [checkable]="true" [checkOptions]="checkOptions">
+    <tr dTableRow>
+      <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
+        {{ colOption.header }}
+      </th>
+      <th dHeadCell width="150px">Operation</th>
+    </tr>
+  </thead>
+  <tbody dTableBody>
+    <ng-template
+      let-rowItem="rowItem"
+      let-rowIndex="rowIndex"
+      let-nestedIndex="nestedIndex"
+    >
+      <tr dTableRow [ngClass]="{ 'table-row-selected': rowItem.$checked }">
+        <td dTableCell class="devui-checkable-cell">
+          <d-checkbox
+            (ngModelChange)="
+              onRowCheckChange($event, rowIndex, nestedIndex, rowItem)
+            "
+            [(ngModel)]="rowItem.$checked"
+            [disabled]="rowItem.$checkDisabled"
+          >
+          </d-checkbox>
+        </td>
+        <td dTableCell *ngFor="let colOption of dataTableOptions.columns">
+          {{
+            colOption.fieldType === "date"
+              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
+              : rowItem[colOption.field]
+          }}
+        </td>
+        <td dTableCell>
+          <d-button bsStyle="text" (click)="manageTag(rowItem)"
+            >标签管理</d-button
+          >
+          <d-button bsStyle="text" class="cse-mg-left-sm">删除</d-button>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</d-data-table>
+<d-pagination
+  *ngIf="pager.total > pager.pageSizeOptions[0]"
+  class="page-nation"
+  [size]="'sm'"
+  [total]="pager.total"
+  [pageSize]="pager.pageSize"
+  [showPageSelector]="false"
+  [totalItemText]="'总条数'"
+  [pageSizeOptions]="pager.pageSizeOptions"
+  [(pageIndex)]="pager.pageIndex"
+  [canViewTotal]="true"
+  [lite]="true"
+  (pageIndexChange)="onPageIndexChange($event)"
+>
+</d-pagination>

@@ -1,0 +1,89 @@
+<div class="title">
+  <span>配置中心</span>
+  <d-button
+    icon="icon-add"
+    bsStyle="danger"
+    style="float: right"
+    (click)="onCreate()"
+  >
+    新建配置
+  </d-button>
+</div>
+<div class="header">
+  <d-category-search
+    [category]="category"
+    class="category-search"
+  ></d-category-search>
+  <d-button
+    bsStyle="text-dark"
+    bsSize="lg"
+    class="cse-mg-left-xs"
+    icon="icon-search"
+    (click)="onRefresh()"
+  ></d-button>
+  <!-- <d-button bsStyle="text-dark" bsSize="lg" class="cse-mg-left-xs" icon="icon-refresh" (click)="onRefresh()"></d-button> -->
+</div>
+
+<d-data-table
+  [dataSource]="basicDataSource"
+  [scrollable]="true"
+  [type]="'striped'"
+>
+  <thead dTableHead>
+    <tr dTableRow>
+      <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
+        {{ colOption.header }}
+      </th>
+    </tr>
+  </thead>
+  <tbody dTableBody>
+    <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+      <tr dTableRow>
+        <td dTableCell>{{ rowItem.key }}</td>
+        <td dTableCell>{{ rowItem.status }}</td>
+        <td dTableCell>
+          <d-tag
+            *ngFor="let tag of rowItem.labels_format; let i = index"
+            [tag]="tag"
+          ></d-tag>
+        </td>
+        <td dTableCell>{{ rowItem.lables | configType }}</td>
+        <td dTableCell>{{ rowItem.value_type }}</td>
+        <td dTableCell>{{ rowItem.update_revision }}</td>
+        <td dTableCell>
+          {{ rowItem.update_time | dDatePipe: "yyyy/MM/dd HH:mm:ss zzzz" }}
+        </td>
+        <td dTableCell>
+          <d-button
+            *ngIf="rowItem.status === 'enabled'"
+            bsStyle="text"
+            (click)="onForbidden(rowItem)"
+            >禁用</d-button
+          >
+          <d-button
+            *ngIf="rowItem.status === 'disabled'"
+            bsStyle="text"
+            (click)="onEnable(rowItem)"
+            >启用</d-button
+          >
+          <d-button
+            bsStyle="text"
+            class="cse-mg-left-xs"
+            [routerLink]="'/kie/eidt'"
+            [queryParams]="{
+              kvId: rowItem.id,
+              configType: rowItem.lables | configType
+            }"
+            >更新</d-button
+          >
+          <d-button
+            bsStyle="text"
+            class="cse-mg-left-xs"
+            (click)="onDeleteItem(rowItem)"
+            >删除</d-button
+          >
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</d-data-table>

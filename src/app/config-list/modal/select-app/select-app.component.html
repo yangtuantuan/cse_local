@@ -1,0 +1,49 @@
+<div class="modal-component">
+  <h2>选择应用</h2>
+
+  <div class="container">
+    <d-data-table
+      [dataSource]="basicDataSource"
+      [scrollable]="true"
+      [type]="'striped'"
+      [tableWidthConfig]="tableWidthConfig"
+      [headerBg]="true"
+    >
+      <thead dTableHead>
+        <tr dTableRow>
+          <th dHeadCell></th>
+          <th dHeadCell *ngFor="let colOption of columns">
+            {{ colOption.header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody dTableBody>
+        <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+          <tr dTableRow style="line-height: 100%">
+            <td dTableCell field="radio">
+              <d-radio
+                style="vertical-align: middle; padding-right: 0"
+                [name]="'radio'"
+                [(ngModel)]="selectId"
+                [value]="rowItem.appId"
+              ></d-radio>
+            </td>
+            <td dTableCell *ngFor="let colOption of columns">
+              {{
+                colOption.fieldType === "date"
+                  ? rowItem[colOption.field]
+                  : rowItem[colOption.field]
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </d-data-table>
+  </div>
+  <div class="footer">
+    <d-button bsStyle="danger" (click)="onConfirm()">确定</d-button>
+    <d-button bsStyle="common" class="cse-mg-left-lg" (click)="onCancel()"
+      >取消</d-button
+    >
+  </div>
+</div>

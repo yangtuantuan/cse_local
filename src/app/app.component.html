@@ -1,0 +1,33 @@
+<d-layout>
+  <d-header>
+    <div class="logo">
+      <span class="text">Local-CSE</span>
+    </div>
+  </d-header>
+  <ng-container *ngIf="showLeftMenu; then thenTemplate; else elseTemplate">
+  </ng-container>
+  <ng-template #thenTemplate>
+    <d-layout>
+      <d-aside>
+        <d-accordion
+          [data]="menu"
+          class="menu"
+          [linkType]="'routerLink'"
+        ></d-accordion>
+      </d-aside>
+      <d-content leftMenu>
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      </d-content>
+    </d-layout>
+  </ng-template>
+  <ng-template #elseTemplate>
+    <d-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </d-content>
+  </ng-template>
+  <d-footer>footer</d-footer>
+</d-layout>

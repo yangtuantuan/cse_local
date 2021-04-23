@@ -1,0 +1,13 @@
+<div class="modal-component">
+  <h2>选择配置类型</h2  >
+
+  <div class="container" *ngFor="let item of items">
+    <div class="left">
+      <div>{{item.title}}</div>
+      <div>{{item.content}}</div>
+    </div>
+    <div class="right">
+      <d-button bsStyle="danger" (click)="onCreateBtn(item.type)">立即配置</d-button>
+    </div>
+  </div>
+</div>
