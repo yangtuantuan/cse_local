@@ -4,6 +4,7 @@ import { FormLayout, ModalService } from 'ng-devui';
 import { EditorComponent } from 'ngx-monaco-editor';
 import { ConfigListService } from '../../config-list.service';
 import { SelectAppComponent } from '../../modal/select-app/select-app.component';
+import { SelectServiceComponent } from '../../modal/select-service/select-service.component';
 import { configTypeFn } from '../../pipe/config-type.pipe';
 
 const defaultConfig = {
@@ -75,6 +76,7 @@ export class ConfigCreateComponent implements OnInit {
   configName!: string; // 配置项
 
   appId = ''; // 应用名称
+  serviceId = ''; // 微服务id
 
   isAlphabetPattern = /^[a-zA-Z0-9-_.]+$/;
 
@@ -85,7 +87,7 @@ export class ConfigCreateComponent implements OnInit {
     if (this.kvId) {
       this.service.getKie(this.kvId).subscribe(
         (res) => {
-          this.tags = this.getTagsByLables(res.labels || {});
+          this.tags = this.service.getTagsByLables(res.labels || {});
           this.configName = res.key;
           this.code = res.value;
           this.configType = configTypeFn(res.labels);
@@ -118,7 +120,7 @@ export class ConfigCreateComponent implements OnInit {
       component: SelectAppComponent,
       data: {
         onClose: (rowItem: any) => {
-          if (rowItem.appId) {
+          if (rowItem?.appId) {
             this.appId = rowItem.appId;
             this.tags = [
               `app=${rowItem.appId}`,
@@ -133,6 +135,35 @@ export class ConfigCreateComponent implements OnInit {
 
   onDeleteApp(): void {
     this.appId = '';
+    this.tags = [];
+  }
+
+  onSelectService(): void {
+    const results = this.modalService.open({
+      id: 'select-service',
+      width: '750px',
+      backdropCloseable: false,
+      component: SelectServiceComponent,
+      data: {
+        onClose: (rowItem?: any, version?: string) => {
+          if (rowItem?.appId) {
+            this.appId = rowItem.appId;
+            this.tags = [
+              `app=${rowItem.appId}`,
+              `enviroment=${rowItem.enviroment}`,
+              `service=${rowItem.serviceName}`,
+              `version=${version}`,
+            ];
+          }
+          results.modalInstance.hide();
+        },
+      },
+    });
+  }
+
+  onDeleteService(): void {
+    this.serviceId = '';
+    this.tags = [];
   }
 
   onAddTage(): void {
@@ -182,18 +213,5 @@ export class ConfigCreateComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/kie']);
-  }
-
-  private getTagsByLables(labels: { [x: string]: any }): string[] {
-    const data = Object.keys(labels || {}).reduce(
-      (list: string[], key: string) => {
-        if (key) {
-          list.push(`${key}=${labels[key]}`);
-        }
-        return list;
-      },
-      []
-    );
-    return data;
   }
 }

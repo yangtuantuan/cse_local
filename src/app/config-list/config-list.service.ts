@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DOMAON_NAME } from 'src/config/global.config';
+import { DOMAON_NAME, PROJECT_ID } from 'src/config/global.config';
 
 const SERVICE_CENTER_PREFIX = '/sse/rest/govern/v2/mservices';
 const CONFIG_CENTER_PREFIX = `/sse/rest/v1/${DOMAON_NAME}/kie`;
@@ -53,6 +53,27 @@ export class ConfigListService {
         'x-enviroment': enviromentId || '',
       },
     });
+  }
+
+  getServices(): Observable<any> {
+    return this.http.get(`${SERVICE_CENTER_PREFIX}`, {
+      headers: {
+        'X-Enterprise-Project-ID': PROJECT_ID,
+      },
+    });
+  }
+
+  getTagsByLables(labels: { [x: string]: any }): string[] {
+    const data = Object.keys(labels || {}).reduce(
+      (list: string[], key: string) => {
+        if (key) {
+          list.push(`${key}=${labels[key]}`);
+        }
+        return list;
+      },
+      []
+    );
+    return data;
   }
 }
 

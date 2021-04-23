@@ -47,7 +47,7 @@
             [tag]="tag"
           ></d-tag>
         </td>
-        <td dTableCell>{{ rowItem.lables | configType }}</td>
+        <td dTableCell>{{ rowItem.labels | configType }}</td>
         <td dTableCell>{{ rowItem.value_type }}</td>
         <td dTableCell>{{ rowItem.update_revision }}</td>
         <td dTableCell>
@@ -72,7 +72,7 @@
             [routerLink]="'/kie/eidt'"
             [queryParams]="{
               kvId: rowItem.id,
-              configType: rowItem.lables | configType
+              configType: rowItem.labels | configType
             }"
             >更新</d-button
           >

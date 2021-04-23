@@ -17,10 +17,15 @@ export const configTypeFn = (value: Lables): 'custom' | 'service' | 'app' => {
   if (!value) {
     return 'custom';
   }
-  if (value.appId && value.serviceName && value.version && value.environment) {
+  if (
+    value.app &&
+    value.service &&
+    value.version &&
+    value.enviroment !== undefined
+  ) {
     return 'service';
   }
-  if (value.appId && value.environment) {
+  if (value.app && value.enviroment !== undefined) {
     return 'app';
   }
   return 'custom';

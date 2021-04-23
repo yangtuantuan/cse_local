@@ -29,11 +29,7 @@
               ></d-radio>
             </td>
             <td dTableCell *ngFor="let colOption of columns">
-              {{
-                colOption.fieldType === "date"
-                  ? rowItem[colOption.field]
-                  : rowItem[colOption.field]
-              }}
+              {{ rowItem[colOption.field] }}
             </td>
           </tr>
         </ng-template>

@@ -1,0 +1,65 @@
+<div class="modal-component">
+  <h2>选择微服务</h2>
+
+  <div class="container">
+    <form dForm ngForm>
+      <d-form-item>
+        <d-form-label [required]="true">选择微服务</d-form-label>
+        <d-form-control>
+          <d-data-table
+            [dataSource]="basicDataSource"
+            [scrollable]="true"
+            [type]="'striped'"
+            [tableWidthConfig]="tableWidthConfig"
+            [headerBg]="true"
+          >
+            <thead dTableHead>
+              <tr dTableRow>
+                <th dHeadCell></th>
+                <th dHeadCell *ngFor="let colOption of columns">
+                  {{ colOption.header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody dTableBody>
+              <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+                <tr dTableRow style="line-height: 100%">
+                  <td dTableCell field="radio">
+                    <d-radio
+                      style="vertical-align: middle; padding-right: 0"
+                      [name]="'radio'"
+                      [(ngModel)]="selectService"
+                      (ngModelChange)="onChangeService(rowItem)"
+                      [value]="rowItem"
+                    ></d-radio>
+                  </td>
+                  <td dTableCell *ngFor="let colOption of columns">
+                    {{ rowItem[colOption.field] }}
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </d-data-table>
+        </d-form-control>
+      </d-form-item>
+      <d-form-item>
+        <d-form-label [required]="true">选择版本</d-form-label>
+        <d-form-control>
+          <d-select
+            class="w-200"
+            [placeholder]="'选择版本'"
+            [options]="options"
+            [readonly]="true"
+            [(ngModel)]="selectVersion"
+          ></d-select>
+        </d-form-control>
+      </d-form-item>
+    </form>
+  </div>
+  <div class="footer">
+    <d-button bsStyle="danger" (click)="onConfirm()">确定</d-button>
+    <d-button bsStyle="common" class="cse-mg-left-lg" (click)="onCancel()"
+      >取消</d-button
+    >
+  </div>
+</div>

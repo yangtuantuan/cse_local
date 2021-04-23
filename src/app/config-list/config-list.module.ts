@@ -7,6 +7,7 @@ import { CreateModalComponent } from './modal/create/create-modal.component';
 import { ConfigCreateComponent } from './pages/config-create/config-create.component';
 import { ConfigTypePipe } from './pipe/config-type.pipe';
 import { SelectAppComponent } from './modal/select-app/select-app.component';
+import { SelectServiceComponent } from './modal/select-service/select-service.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { SelectAppComponent } from './modal/select-app/select-app.component';
     CreateModalComponent,
     ConfigCreateComponent,
     SelectAppComponent,
+    SelectServiceComponent,
   ],
   imports: [CommonModule, SharedModule, ConfigListRoutingModule],
   providers: [],

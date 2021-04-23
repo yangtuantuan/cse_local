@@ -7,6 +7,7 @@ import {
   FormModule,
   ModalModule,
   RadioModule,
+  SelectModule,
   TagsModule,
   ToggleModule,
 } from 'ng-devui';
@@ -24,6 +25,7 @@ const devUIModule = [
   RadioModule,
   TagsModule,
   ToggleModule,
+  SelectModule,
 ];
 const angularModule = [FormsModule, HttpClientXsrfModule, ReactiveFormsModule];
 
