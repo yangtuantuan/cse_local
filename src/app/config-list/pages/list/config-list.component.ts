@@ -100,7 +100,9 @@ export class ConfigListComponent implements OnInit {
     this.service.getAllKies().subscribe(
       (data) => {
         this.basicDataSource = data.data.map((item) => {
-          item.labels_format = configTypeFn(item.labels);
+          item.labels_format = Object.keys(item.labels).map((key) => {
+            return `${key}=${item.labels[key] || ''}`;
+          });
           return item;
         });
       },
