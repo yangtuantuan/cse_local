@@ -1,6 +1,8 @@
 <div class="title">服务列表</div>
 <div class="btn-group">
-  <d-button icon="icon-add" bsStyle="primary" (click)="onCreateService()"> 创建微服务 </d-button>
+  <d-button icon="icon-add" bsStyle="primary" (click)="onCreateService()">
+    创建微服务
+  </d-button>
   <d-button icon="icon-filter" bsStyle="common"> 清理无实例版本 </d-button>
   <d-button icon="icon-filter" bsStyle="common" (click)="deleteItem()">
     删除
@@ -13,6 +15,7 @@
 >
   <thead dTableHead [checkable]="true" [checkOptions]="checkOptions">
     <tr dTableRow>
+      <th dHeadCell width="150px">Name</th>
       <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
         {{ colOption.header }}
       </th>
@@ -36,6 +39,11 @@
           >
           </d-checkbox>
         </td>
+        <td dTableCell>
+          <a [routerLink]="['/servicedetail', rowItem.serviceId]">
+            {{ rowItem.serviceName }}
+          </a>
+        </td>
         <td dTableCell *ngFor="let colOption of dataTableOptions.columns">
           {{
             colOption.fieldType === "date"
@@ -47,9 +55,18 @@
           <d-button bsStyle="text" (click)="manageTag(rowItem)"
             >标签管理</d-button
           >
-          <d-button bsStyle="text" class="cse-mg-left-sm">删除</d-button>
+          <d-button
+            bsStyle="text"
+            class="cse-mg-left-sm"
+            (click)="deleteItem(rowItem)"
+            >删除</d-button
+          >
         </td>
       </tr>
+    </ng-template>
+
+    <ng-template #noResultTemplateRef>
+      <div style="text-align: center; margin-top: 20px">No Data</div>
     </ng-template>
   </tbody>
 </d-data-table>

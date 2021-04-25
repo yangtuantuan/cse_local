@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TableWidthConfig } from 'ng-devui';
-import { ConfigListService } from '../../config-list.service';
+import { ConfigService } from '../../../../common/config.service';
 
 @Component({
   selector: 'app-select-service',
@@ -11,7 +11,7 @@ export class SelectServiceComponent implements OnInit {
   @Input() data!: {
     onClose: (rowItem?: any, version?: string) => void;
   };
-  constructor(private service: ConfigListService) {}
+  constructor(private service: ConfigService) {}
 
   selectService: any;
   basicDataSource!: any[];

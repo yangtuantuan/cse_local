@@ -1,6 +1,44 @@
-<div class="title">{{title}}</div>
+<div class="title">{{ title }}</div>
 
-<d-data-table #datatable [dataSource]="basicDataSource" [scrollable]="true" [type]="'striped'">
-    <d-column *ngFor="let colOption of dataTableOptions.columns" [field]="colOption.field" [header]="colOption.header" [fieldType]="colOption.fieldType">
-    </d-column>
+<d-data-table
+  #datatable
+  [dataSource]="basicDataSource"
+  [scrollable]="true"
+  [type]="'striped'"
+  [headerBg]="true"
+>
+  <thead dTableHead>
+    <tr dTableRow>
+      <th dHeadCell *ngFor="let colOption of columns">
+        {{ colOption.header }}
+      </th>
+    </tr>
+  </thead>
+  <tbody dTableBody>
+    <ng-template
+      let-rowItem="rowItem"
+      let-rowIndex="rowIndex"
+      let-nestedIndex="nestedIndex"
+    >
+      <tr dTableRow>
+        <td dTableCell *ngFor="let colOption of columns">
+          {{
+            colOption.fieldType === "date"
+              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
+              : rowItem[colOption.field]
+          }}
+        </td>
+        <!-- <td dTableCell>
+          <d-button bsStyle="text">标签管理</d-button>
+          <d-button bsStyle="text" class="cse-mg-left-sm">删除</d-button>
+        </td> -->
+      </tr>
+    </ng-template>
+
+    <ng-template #noResultTemplateRef>
+      <div style="text-align: center; margin-top: 20px">No Data</div>
+    </ng-template>
+  </tbody>
 </d-data-table>
+
+{{ basicDataSource | json }}

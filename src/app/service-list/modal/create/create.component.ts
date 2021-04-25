@@ -1,34 +1,31 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ServiceListService } from '../../service-list.service';
+import { ServiceService } from '../../../../common/service.service';
 
 const defaultOpetion = [
   {
     id: '',
     label: '<空>',
-  }
-]
+  },
+];
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.less']
+  styleUrls: ['./create.component.less'],
 })
 export class CreateComponent implements OnInit {
   @Input() data!: {
-    onClose: () => void;
-  }
+    onClose: (data?: any) => void;
+  };
 
-  constructor(
-    private service: ServiceListService,
-
-  ) { }
+  constructor(private service: ServiceService) {}
 
   items = [
     {
       title: 'aaa',
       content: 'content',
-      type: 'ddd'
-    }
+      type: 'ddd',
+    },
   ];
 
   versionReg = /^\d{1,}\.(\d{1,}\.){1,2}\d{1,}$/;
@@ -36,45 +33,38 @@ export class CreateComponent implements OnInit {
   serviceName!: string;
   appId!: string;
   version!: string;
-  environment!: string;
+
   description!: string;
 
   envOpetions!: {
-    id: string,
-    label: string,
-  }[]
+    id: string;
+    label: string;
+  }[];
+  environment!: {
+    id: string;
+    label: string;
+  };
 
   ngOnInit(): void {
-
-    this.envOpetions = JSON.parse(JSON.stringify(defaultOpetion))
+    this.envOpetions = JSON.parse(JSON.stringify(defaultOpetion));
+    this.environment = this.envOpetions[0];
   }
 
-  onCreateBtn(): void {
+  async onCreateBtn(): Promise<void> {
     const parmas = {
-      appId: this.appId,
-      description: this.description,
-      environment: this.environment,
-      serviceName: this.serviceName,
-      version: this.version,
-      level: "BACK",
-      status: "UP",
-    }
-
-    this.service.createService(parmas).subscribe(
-      (res) => {
-        // todo
+      service: {
+        appId: this.appId,
+        description: this.description,
+        environment: this.environment.id || '',
+        serviceName: this.serviceName,
+        version: this.version,
       },
-      (err) => {
-        // todo 提示
-      }
-    )
-    this.data.onClose();
+    };
+    const service = await this.service.postService(parmas).toPromise();
+    this.data.onClose(service?.serviceId);
   }
 
   onCancel(): void {
     this.data.onClose();
   }
-
-
-
 }

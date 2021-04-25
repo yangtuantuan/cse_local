@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { InstanceListComponent } from './instance-list/instance-list.component';
-
 const routes: Routes = [
   { path: '', redirectTo: 'servicelist', pathMatch: 'full' },
   {
@@ -12,7 +10,20 @@ const routes: Routes = [
         (mod) => mod.ServiceListModule
       ),
   },
-  { path: 'instancelist', component: InstanceListComponent },
+  {
+    path: 'servicedetail/:id',
+    loadChildren: () =>
+      import('./service-detail/service-detail.module').then(
+        (mod) => mod.ServiceDetailModule
+      ),
+  },
+  {
+    path: 'instancelist',
+    loadChildren: () =>
+      import('./instance-list/instance-list-routing.module').then(
+        (mod) => mod.InstanceListRoutingModule
+      ),
+  },
   {
     path: 'kie',
     loadChildren: () =>

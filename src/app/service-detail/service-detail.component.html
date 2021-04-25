@@ -1,0 +1,148 @@
+<div class="container">
+  <d-breadcrumb style="margin-bottom: 20px">
+    <d-breadcrumb-item>
+      <a routerLink="/servicelist">微服务目录</a>
+    </d-breadcrumb-item>
+    <d-breadcrumb-item>
+      <span>{{ title }}</span>
+    </d-breadcrumb-item>
+  </d-breadcrumb>
+
+  <section style="margin-left: 40px">
+    <form dForm [layout]="formLayout.Horizontal">
+      <div class="grid">
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 微服务名称 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.serviceName }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 实例数 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.instance?.length || 0 }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 所属环境 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.environment }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 所属应用 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.appId }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 微服务版本 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.version }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 框架 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.framework?.name }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 上线时间 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{
+                serviceData?.modTimestamp | dDatePipe: "y/M/d HH:mm:ss zzzz "
+              }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 上线时间 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{
+                serviceData?.modTimestamp | dDatePipe: "y/M/d HH:mm:ss zzzz "
+              }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 标签 </d-form-label>
+            <d-form-control class="form-control-width">
+              标签管理
+            </d-form-control>
+          </d-form-item>
+        </div>
+
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 创建时间 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.timestamp | dDatePipe: "y/M/d HH:mm:ss zzzz " }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+        <div class="u-1-2">
+          <d-form-item>
+            <d-form-label> 描述 </d-form-label>
+            <d-form-control class="form-control-width">
+              {{ serviceData?.description || "--" }}
+            </d-form-control>
+          </d-form-item>
+        </div>
+      </div>
+    </form>
+  </section>
+  <div>
+    <d-tabs
+      [(activeTab)]="acticeTabId"
+      [showContent]="true"
+      [reactivable]="true"
+      (activeTabChange)="activeTabChange($event)"
+    >
+      <d-tab title="实例列表" tabId="instance" id="instance">
+        <ng-template dTabContent>
+          <app-instance-list></app-instance-list>
+        </ng-template>
+      </d-tab>
+
+      <d-tab title="被调用服务" tabId="invoked" id="invoked">
+        <ng-template dTabContent>
+          <app-invoked-service></app-invoked-service>
+        </ng-template>
+      </d-tab>
+
+      <d-tab title="调用服务" tabId="invoking" id="invoking">
+        <ng-template dTabContent>
+          <app-invoking-service></app-invoking-service>
+        </ng-template>
+      </d-tab>
+      <d-tab title="配置" tabId="configuration" id="configuration">
+        <ng-template dTabContent>
+          <app-configuration></app-configuration>
+        </ng-template>
+      </d-tab>
+      <d-tab title="服务契约" tabId="contract" id="contract">
+        <ng-template dTabContent>
+          <app-service-contract></app-service-contract>
+        </ng-template>
+      </d-tab>
+    </d-tabs>
+  </div>
+</div>
+{{ serviceData | json }}

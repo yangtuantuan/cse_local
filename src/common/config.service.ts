@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DOMAON_NAME, PROJECT_ID } from 'src/config/global.config';
-
-const SERVICE_CENTER_PREFIX = '/sse/rest/govern/v2/mservices';
-const CONFIG_CENTER_PREFIX = `/sse/rest/v1/${DOMAON_NAME}/kie`;
+import {
+  PROJECT_ID,
+  CONFIG_CENTER_PREFIX,
+  REGISTRY_PREFIX,
+  GOVERN_PREFIX,
+} from 'src/config/global.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigListService {
+export class ConfigService {
   constructor(private http: HttpClient) {}
 
   getAllKies(): Observable<{ total: number; data: KieItem[] }> {
@@ -48,7 +50,7 @@ export class ConfigListService {
   }
 
   getApps(enviromentId?: string): Observable<any> {
-    return this.http.get(`${SERVICE_CENTER_PREFIX}/apps`, {
+    return this.http.get(`${GOVERN_PREFIX}/microservices/apps`, {
       headers: {
         'x-enviroment': enviromentId || '',
       },
@@ -56,7 +58,7 @@ export class ConfigListService {
   }
 
   getServices(): Observable<any> {
-    return this.http.get(`${SERVICE_CENTER_PREFIX}`, {
+    return this.http.get(`${REGISTRY_PREFIX}/microservices`, {
       headers: {
         'X-Enterprise-Project-ID': PROJECT_ID,
       },

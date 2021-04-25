@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService, ICategorySearchTagItem, ModalService } from 'ng-devui';
-import { ConfigListService } from '../../config-list.service';
+import { ConfigService } from '../../../../common/config.service';
 import { CreateModalComponent } from '../../modal/create/create-modal.component';
 import { configTypeFn } from '../../pipe/config-type.pipe';
 
@@ -11,7 +11,7 @@ import { configTypeFn } from '../../pipe/config-type.pipe';
 })
 export class ConfigListComponent implements OnInit {
   constructor(
-    private service: ConfigListService,
+    private service: ConfigService,
     private modalService: ModalService,
     private dialogService: DialogService
   ) {}

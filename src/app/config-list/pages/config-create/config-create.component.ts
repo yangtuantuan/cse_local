@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormLayout, ModalService } from 'ng-devui';
 import { EditorComponent } from 'ngx-monaco-editor';
-import { ConfigListService } from '../../config-list.service';
+import { ConfigService } from '../../../../common/config.service';
 import { SelectAppComponent } from '../../modal/select-app/select-app.component';
 import { SelectServiceComponent } from '../../modal/select-service/select-service.component';
 import { configTypeFn } from '../../pipe/config-type.pipe';
@@ -22,7 +22,7 @@ export class ConfigCreateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ConfigListService,
+    private service: ConfigService,
     private modalService: ModalService
   ) {
     this.route.queryParams.subscribe((res) => {

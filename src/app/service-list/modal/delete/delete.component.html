@@ -1,8 +1,34 @@
 <div class="modal-component">
-  <h2>创建微服务</h2>
+  <h2>删除微服务</h2>
 
-  <div class="form">
-    <form dForm ngForm #form>
+  <div class="container">
+    <div style="width: 80px">
+      <img src="" alt="" />
+    </div>
+    <div>
+      <div>确定要对以下 1 个微服务及其版本进行删除操作吗？</div>
+      <p>
+        删除后将无法恢复。
+        <span style="color: red">
+          如果删除的服务有实例，需要先将对应实例卸载，否则服务会再次注册。
+        </span>
+      </p>
+
+      <p>
+        请在下方的输入框中输入"<span style="color: red">DELETE</span
+        >"确认删除以下微服务。
+      </p>
+
+      <div>
+        <input
+          type="text"
+          dTextInput
+          [(ngModel)]="confrimText"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+    <!-- <form dForm ngForm #form>
       <d-form-item>
         <d-form-label [required]="true">微服名称</d-form-label>
         <d-form-control>
@@ -83,10 +109,10 @@
           <textarea dTextarea placeholder="Please Enter"></textarea>
         </d-form-control>
       </d-form-item>
-    </form>
+    </form> -->
   </div>
   <div class="footer">
-    <d-button bsStyle="danger" (click)="onCreateBtn()">确定</d-button>
+    <d-button bsStyle="danger" (click)="onConfirm()">确定</d-button>
     <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg"
       >取消</d-button
     >
