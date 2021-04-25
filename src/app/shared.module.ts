@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientXsrfModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +10,7 @@ import {
   RadioModule,
   SelectModule,
   TagsModule,
+  TextareaModule,
   ToggleModule,
 } from 'ng-devui';
 import { CheckBoxModule } from 'ng-devui/checkbox';
@@ -26,8 +28,9 @@ const devUIModule = [
   TagsModule,
   ToggleModule,
   SelectModule,
+  TextareaModule,
 ];
-const angularModule = [FormsModule, HttpClientXsrfModule, ReactiveFormsModule];
+const angularModule = [CommonModule, FormsModule, HttpClientXsrfModule, ReactiveFormsModule];
 
 @NgModule({
   declarations: [],

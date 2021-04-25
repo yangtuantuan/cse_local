@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { ConfigListRoutingModule } from './config-list-routing.module';
@@ -18,7 +17,7 @@ import { SelectServiceComponent } from './modal/select-service/select-service.co
     SelectAppComponent,
     SelectServiceComponent,
   ],
-  imports: [CommonModule, SharedModule, ConfigListRoutingModule],
+  imports: [SharedModule, ConfigListRoutingModule],
   providers: [],
   exports: [ConfigListRoutingModule],
 })

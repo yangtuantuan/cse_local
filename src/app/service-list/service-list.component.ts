@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DialogService } from 'ng-devui/modal';
+import { DialogService, ModalService } from 'ng-devui/modal';
 import { DataTableComponent, TableCheckOptions, TableWidthConfig, RowCheckChangeEventArg } from 'ng-devui/data-table';
 import { ManageTagComponent } from './manage-tag/manage-tag.component';
 import { basicDataSource } from 'mock/serviceList.mock';
+import { CreateComponent } from './modal/create/create.component';
 
 @Component({
   selector: 'app-service-list',
@@ -10,7 +11,7 @@ import { basicDataSource } from 'mock/serviceList.mock';
   styleUrls: ['./service-list.component.less']
 })
 export class ServiceListComponent implements OnInit {
-  constructor(private dialogService: DialogService) {
+  constructor(private dialogService: DialogService, private modalService: ModalService) {
 
   }
   @ViewChild(DataTableComponent, { static: true }) datatable!: DataTableComponent;
@@ -194,5 +195,19 @@ export class ServiceListComponent implements OnInit {
         );
       }
     });
+  }
+
+  onCreateService(): void {
+    const resulse =  this.modalService.open({
+      id: 'create-service',
+      showAnimation: true,
+      width: '750px',
+      component: CreateComponent,
+      data: {
+        onClose: () => {
+          resulse.modalInstance.hide();
+        }  
+      },
+    })
   }
 }
