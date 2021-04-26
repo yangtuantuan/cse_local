@@ -1,1 +1,36 @@
-<p>service-contract works!</p>
+<div>
+  <div>
+    <d-select
+      class="select"
+      [options]="options"
+      [filterKey]="'schemaId'"
+      class="w-150"
+      [(ngModel)]="selected"
+      [ngModelOptions]="{ standalone: true }"
+    ></d-select>
+    <d-button-group class="button-grop">
+      <d-button
+        [bsStyle]="selectBtn === 'swagger' ? 'primary' : 'common'"
+        (btnClick)="onSelectLanguage('swagger')"
+      >
+        Swagger
+      </d-button>
+      <d-button
+        [bsStyle]="selectBtn === 'yaml' ? 'primary' : 'common'"
+        (btnClick)="onSelectLanguage('yaml')"
+        >Yaml</d-button
+      >
+    </d-button-group>
+  </div>
+
+  <div *ngIf="selectBtn === 'swagger'">
+    <app-swagger [code]="selected.schema"></app-swagger>
+  </div>
+  <div *ngIf="selectBtn === 'yaml'">
+    <ngx-monaco-editor
+      class="monaco-editor"
+      [options]="monacoOptions"
+      [(ngModel)]="selected.schema"
+    ></ngx-monaco-editor>
+  </div>
+</div>

@@ -6,12 +6,14 @@
   [scrollable]="true"
   [type]="'striped'"
   [headerBg]="true"
+  [tableWidthConfig]="tableWidthConfig"
 >
   <thead dTableHead>
     <tr dTableRow>
       <th dHeadCell *ngFor="let colOption of columns">
         {{ colOption.header }}
       </th>
+      <th dHeadCell>操作</th>
     </tr>
   </thead>
   <tbody dTableBody>
@@ -28,10 +30,9 @@
               : rowItem[colOption.field]
           }}
         </td>
-        <!-- <td dTableCell>
-          <d-button bsStyle="text">标签管理</d-button>
-          <d-button bsStyle="text" class="cse-mg-left-sm">删除</d-button>
-        </td> -->
+        <td dTableCell>
+          <app-action-menu [actions]="actionsFn()" (meunClick)="actionClick($event)"></app-action-menu>
+        </td>
       </tr>
     </ng-template>
 
@@ -40,5 +41,3 @@
     </ng-template>
   </tbody>
 </d-data-table>
-
-{{ basicDataSource | json }}

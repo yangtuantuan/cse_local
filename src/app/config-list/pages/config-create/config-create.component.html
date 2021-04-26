@@ -13,12 +13,12 @@
       <d-form-label [required]="false">配置类型</d-form-label>
       <d-form-control>{{ configType }}</d-form-control>
     </d-form-item>
-    <d-form-item *ngIf="configType === 'app'">
+    <d-form-item *ngIf="configType === 'app' && type === 'create'">
       <d-form-label [required]="false">应用</d-form-label>
       <d-form-control>
         <span *ngIf="appId">{{ appId }}</span>
         <i
-          *ngIf="appId && type === 'create'"
+          *ngIf="appId"
           class="icon icon-delete app-delete"
           (click)="onDeleteApp()"
         ></i>
@@ -28,16 +28,19 @@
       </d-form-control>
     </d-form-item>
 
-    <d-form-item *ngIf="configType === 'service'">
+    <d-form-item *ngIf="configType === 'service' && type === 'create'">
       <d-form-label [required]="false">微服务</d-form-label>
       <d-form-control>
         <span *ngIf="serviceId">{{ serviceId }}</span>
         <i
-          *ngIf="serviceId && type === 'create'"
+          *ngIf="serviceId"
           class="icon icon-delete app-delete"
           (click)="onDeleteService()"
         ></i>
-        <d-button *ngIf="!serviceId" bsStyle="common" (click)="onSelectService()"
+        <d-button
+          *ngIf="!serviceId"
+          bsStyle="common"
+          (click)="onSelectService()"
           >选择微服务</d-button
         >
       </d-form-control>

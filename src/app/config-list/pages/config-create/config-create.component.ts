@@ -5,7 +5,6 @@ import { EditorComponent } from 'ngx-monaco-editor';
 import { ConfigService } from '../../../../common/config.service';
 import { SelectAppComponent } from '../../modal/select-app/select-app.component';
 import { SelectServiceComponent } from '../../modal/select-service/select-service.component';
-import { configTypeFn } from '../../pipe/config-type.pipe';
 
 const defaultConfig = {
   theme: 'vs-dark',
@@ -90,7 +89,6 @@ export class ConfigCreateComponent implements OnInit {
           this.tags = this.service.getTagsByLables(res.labels || {});
           this.configName = res.key;
           this.code = res.value;
-          this.configType = configTypeFn(res.labels);
           this.status = res.status;
           this.configFormatItems = JSON.parse(
             JSON.stringify(this.configFormatItems)
@@ -147,11 +145,11 @@ export class ConfigCreateComponent implements OnInit {
       data: {
         onClose: (rowItem?: any, version?: string) => {
           if (rowItem?.appId) {
-            this.appId = rowItem.appId;
+            this.serviceId = rowItem.serviceName;
             this.tags = [
-              `app=${rowItem.appId}`,
-              `enviroment=${rowItem.enviroment}`,
               `service=${rowItem.serviceName}`,
+              `app=${rowItem.appId}`,
+              `enviroment=${rowItem.environment}`,
               `version=${version}`,
             ];
           }

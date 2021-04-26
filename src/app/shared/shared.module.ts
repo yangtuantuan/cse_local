@@ -12,10 +12,12 @@ import {
   TagsModule,
   TextareaModule,
   ToggleModule,
+  DropDownModule,
 } from 'ng-devui';
 import { CheckBoxModule } from 'ng-devui/checkbox';
 import { LayoutModule } from 'ng-devui/layout';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { ActionMenuComponent } from './components/action-menu/action-menu.component';
 
 const devUIModule = [
   CategorySearchModule,
@@ -29,12 +31,20 @@ const devUIModule = [
   ToggleModule,
   SelectModule,
   TextareaModule,
+  DropDownModule,
 ];
-const angularModule = [CommonModule, FormsModule, HttpClientXsrfModule, ReactiveFormsModule];
+const angularModule = [
+  CommonModule,
+  FormsModule,
+  HttpClientXsrfModule,
+  ReactiveFormsModule,
+];
+
+const directive = [ActionMenuComponent];
 
 @NgModule({
-  declarations: [],
+  declarations: [...directive],
   imports: [...devUIModule, ...angularModule, MonacoEditorModule.forRoot()],
-  exports: [...devUIModule, ...angularModule, MonacoEditorModule],
+  exports: [...devUIModule, ...angularModule, MonacoEditorModule, directive],
 })
 export class SharedModule {}

@@ -49,8 +49,10 @@
             class="w-200"
             [placeholder]="'选择版本'"
             [options]="options"
+            [filterKey]="'version'"
             [readonly]="true"
             [(ngModel)]="selectVersion"
+            [ngModelOptions]="{ standalone: true }"
           ></d-select>
         </d-form-control>
       </d-form-item>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { TableWidthConfig } from 'ng-devui';
 import { ServiceService } from 'src/common/service.service';
+import { ActionItem } from '../shared/components/action-menu/action-menu.component';
 
 @Component({
   selector: 'app-instance-list',
@@ -12,7 +14,7 @@ export class InstanceListComponent implements OnInit {
   basicDataSource = [];
   columns = [
     {
-      field: 'name',
+      field: 'hostName',
       header: '实例名称',
       fieldType: 'text',
       order: 1,
@@ -42,41 +44,63 @@ export class InstanceListComponent implements OnInit {
       order: 5,
     },
     {
-      field: 'updateTime',
+      field: 'modTimestamp',
       header: '更新时间',
       fieldType: 'text',
-      order: 4,
+      order: 6,
+    },
+    // {
+    //   field: 'operation',
+    //   header: '操作',
+    //   fieldType: 'text',
+    //   order: 4,
+    // },
+  ];
+  tableWidthConfig: TableWidthConfig[] = [
+    {
+      field: 'hostName',
+      width: '300px',
+    },
+  ];
+
+  actions: ActionItem[] = [
+    {
+      id: '1',
+      label: 'aaa',
     },
     {
-      field: 'operation',
-      header: '操作',
-      fieldType: 'text',
-      order: 4,
+      id: '2',
+      label: 'bbb',
+    },
+    {
+      id: '3',
+      label: 'ccc',
+    },
+    {
+      id: '4',
+      label: 'dddd',
     },
   ];
 
   constructor(private service: ServiceService) {}
 
   ngOnInit(): void {
-    const params = {
-      options: 'instances',
-    };
-    this.service.getServiceByGovern(params).subscribe(
+    this.service.getInstances().subscribe(
       (res) => {
-        this.basicDataSource = res.allServicesDetail.reduce(
-          (list: any[], item: any) => {
-            if (item.instances?.length) {
-              list.push(item.instances);
-            }
-            return list;
-          },
-          []
-        );
-        console.log(this.basicDataSource);
+        this.basicDataSource = res;
+        console.log(res);
       },
       (err) => {
         // todo 提示
       }
     );
+  }
+
+  actionsFn(): ActionItem[] {
+    return JSON.parse(JSON.stringify(this.actions));
+  }
+
+  actionClick(e: any): void {
+    console.log(e);
   }
 }

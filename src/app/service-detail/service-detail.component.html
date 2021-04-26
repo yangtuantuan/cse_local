@@ -123,13 +123,20 @@
 
       <d-tab title="被调用服务" tabId="invoked" id="invoked">
         <ng-template dTabContent>
-          <app-invoked-service></app-invoked-service>
+          <app-invoked-service
+            [appId]="serviceData.appId"
+            [serviceName]="serviceData.serviceName"
+          ></app-invoked-service>
         </ng-template>
       </d-tab>
 
       <d-tab title="调用服务" tabId="invoking" id="invoking">
         <ng-template dTabContent>
-          <app-invoking-service></app-invoking-service>
+          <app-invoked-service
+            [appId]="serviceData.appId"
+            [serviceName]="serviceData.serviceName"
+            [type]="'providers'"
+          ></app-invoked-service>
         </ng-template>
       </d-tab>
       <d-tab title="配置" tabId="configuration" id="configuration">
@@ -145,4 +152,3 @@
     </d-tabs>
   </div>
 </div>
-{{ serviceData | json }}

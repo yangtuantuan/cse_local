@@ -1,1 +1,37 @@
-<p>invoked-service works!</p>
+<d-data-table
+  #datatable
+  [dataSource]="basicDataSource"
+  [scrollable]="true"
+  [type]="'striped'"
+  [headerBg]="true"
+  [tableWidthConfig]="columns"
+>
+  <thead dTableHead>
+    <tr dTableRow>
+      <th dHeadCell *ngFor="let colOption of columns">
+        {{ colOption.header }}
+      </th>
+    </tr>
+  </thead>
+  <tbody dTableBody>
+    <ng-template
+      let-rowItem="rowItem"
+      let-rowIndex="rowIndex"
+      let-nestedIndex="nestedIndex"
+    >
+      <tr dTableRow>
+        <td dTableCell *ngFor="let colOption of columns">
+          {{
+            colOption.fieldType === "date"
+              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
+              : rowItem[colOption.field]
+          }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #noResultTemplateRef>
+      <div style="text-align: center; margin-top: 20px">No Data</div>
+    </ng-template>
+  </tbody>
+</d-data-table>
