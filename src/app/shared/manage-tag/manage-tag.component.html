@@ -1,0 +1,120 @@
+<div class="modal-component">
+  <h2>标签管理</h2>
+  <div class="content">
+    <d-data-table
+      #datatable
+      [dataSource]="basicDataSource"
+      [scrollable]="true"
+      [headerBg]="true"
+      [type]="'striped'"
+    >
+      <thead dTableHead>
+        <tr dTableRow>
+          <th dHeadCell *ngFor="let column of columns">
+            {{ column.header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody dTableBody>
+        <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+          <tr dTableRow *ngIf="rowIndex === eidteIndex">
+            <td dTableCell [attr.colspan]="columns.length">
+              <div
+                *ngIf="!headerNewForm"
+                (click)="newRow()"
+                class="cursor-pointer"
+              >
+                <span class="tips-icon icon-add"></span>
+                <span>Create new data</span>
+              </div>
+              <div *ngIf="headerNewForm" class="edit-padding-fix">
+                <div class="input-block">
+                  <input
+                    class="devui-form-control"
+                    [(ngModel)]="defaultRowData.key"
+                    placeholder="firstName"
+                    type="text"
+                  />
+                </div>
+                <div class="input-block">
+                  <input
+                    class="devui-form-control"
+                    [(ngModel)]="defaultRowData.value"
+                    placeholder="lastName"
+                    type="text"
+                  />
+                </div>
+                <d-button style="margin-right: 5px" (click)="quickRowAdded()"
+                  >Confirm</d-button
+                >
+                <d-button bsStyle="common" (click)="quickRowCancel()"
+                  >Cancel</d-button
+                >
+              </div>
+            </td>
+          </tr>
+          <tr dTableRow>
+            <td dTableCell>{{ rowItem.key }}</td>
+            <td dTableCell>{{ rowItem.value }}</td>
+            <td dTableCell>
+              <app-action-menu
+                [maxShowNum]="3"
+                [actions]="actionsFn(rowItem)"
+                (menuClick)="menuClick($event, rowItem, rowIndex)"
+              ></app-action-menu>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #noResultTemplateRef>
+          <tr dTableRow>
+            <td dTableCell [attr.colspan]="columns.length">
+              <div
+                (click)="newRow()"
+                class="cursor-pointer"
+                style="padding: 10px 5px"
+                *ngIf="!headerNewForm"
+              >
+                <span class="tips-icon icon-add"></span>
+                <span>Create new data</span>
+              </div>
+              <div
+                *ngIf="headerNewForm"
+                class="edit-padding-fix"
+                style="padding: 10px 5px"
+              >
+                <div class="input-block">
+                  <input
+                    class="devui-form-control"
+                    [(ngModel)]="defaultRowData.key"
+                    placeholder="firstName"
+                    type="text"
+                  />
+                </div>
+                <div class="input-block">
+                  <input
+                    class="devui-form-control"
+                    [(ngModel)]="defaultRowData.value"
+                    placeholder="lastName"
+                    type="text"
+                  />
+                </div>
+                <d-button style="margin-right: 5px" (click)="quickRowAdded()"
+                  >Confirm</d-button
+                >
+                <d-button bsStyle="common" (click)="quickRowCancel()"
+                  >Cancel</d-button
+                >
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </d-data-table>
+  </div>
+  <div class="footer">
+    <d-button bsStyle="danger" (click)="onConfirmBtn()">确定</d-button>
+    <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg"
+      >取消</d-button
+    >
+  </div>
+</div>

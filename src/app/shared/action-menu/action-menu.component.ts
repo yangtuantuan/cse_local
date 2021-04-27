@@ -19,7 +19,7 @@ export class ActionMenuComponent implements OnInit {
   @Input() onToggle?: (e?: any) => void;
   @Input() moreBtnRef?: TemplateRef<any>;
 
-  @Output() meunClick = new EventEmitter();
+  @Output() menuClick = new EventEmitter<ActionItem>();
 
   constructor() {}
 
@@ -27,8 +27,6 @@ export class ActionMenuComponent implements OnInit {
   buttonActions?: ActionItem[];
 
   ngOnInit(): void {
-    console.log(this.actions);
-
     this.actions = this.actions.filter(
       (item) => item.show || item.show === undefined
     );
@@ -39,7 +37,6 @@ export class ActionMenuComponent implements OnInit {
     } else {
       this.buttonActions = this.actions;
     }
-    console.log(this.buttonActions, this.moreActions);
   }
 
   toggle(e?: any): void {
@@ -49,14 +46,19 @@ export class ActionMenuComponent implements OnInit {
   }
 
   onClick(e: ActionItem): any {
-    this.meunClick.emit(e);
+    if (typeof e.click === 'function') {
+      e.click(e);
+    }
+    this.menuClick.emit(e);
   }
 }
 
 export interface ActionItem {
-  id?: string;
+  id: string;
   label: string;
   disabled?: boolean;
   show?: boolean;
   tip?: string;
+  click?: (e: ActionItem) => void;
+  [key: string]: any;
 }

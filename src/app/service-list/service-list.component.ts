@@ -8,8 +8,8 @@ import {
 import { DialogService, ModalService } from 'ng-devui/modal';
 import { CreateComponent } from './modal/create/create.component';
 import { DeleteComponent } from './modal/delete/delete.component';
-import { ManageTagComponent } from './modal/manage-tag/manage-tag.component';
 import { ServiceService } from '../../common/service.service';
+import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
 
 @Component({
   selector: 'app-service-list',
@@ -106,6 +106,8 @@ export class ServiceListComponent implements OnInit {
   }
 
   initData(): void {
+    this.basicDataSource = [];
+    this.pager.total = 0;
     this.service.getServiceByGovern().subscribe(
       (data) => {
         this.basicDataSource = (data?.allServicesDetail || []).map(
@@ -120,65 +122,26 @@ export class ServiceListComponent implements OnInit {
       },
       (err) => {
         // todo 提示
-        this.basicDataSource = [];
-        this.pager.total = 0;
       }
     );
-
-    // this.service.getService().subscribe(
-    //   (data) => {
-    //     this.basicDataSource = (data?.services || []).map((item: any) => {
-    //       if (!item?.environment) {
-    //         item.microService.environment = '<空>';
-    //       }
-    //       return item;
-    //     });
-    //     this.pager.total = basicDataSource.length;
-    //   },
-    //   (err) => {
-    //     // todo 提示
-    //     this.basicDataSource = [];
-    //     this.pager.total = 0;
-    //   }
-    // );
   }
 
-  public manageTag(rowIten: any): void {
-    const results = this.dialogService.open({
+  public manageTag(rowItem: any): void {
+    const results = this.modalService.open({
       id: 'manageTag',
-      width: '346px',
-      maxHeight: '600px',
-      title: '标签管理',
-      content: ManageTagComponent,
+      width: '750px',
+      component: ManageTagComponent,
       backdropCloseable: false,
-      onClose: () => {
-        console.log('on dialog closed');
-      },
-      buttons: [
-        {
-          cssClass: 'primary',
-          text: 'Ok',
-          disabled: false,
-          handler: ($event: Event) => {
-            results.modalInstance.hide();
-          },
-        },
-        {
-          id: 'btn-cancel',
-          cssClass: 'common',
-          text: 'Cancel',
-          handler: ($event: Event) => {
-            results.modalInstance.hide();
-          },
-        },
-      ],
       data: {
-        name: 'Tom',
-        age: 10,
-        address: 'Chengdu',
+        close: (res?: boolean) => {
+          if (res) {
+            this.initData();
+          }
+          results.modalInstance.hide();
+        },
+        serviceId: rowItem.serviceId,
       },
     });
-    console.log(results.modalContentInstance);
   }
 
   public deleteItem(rowItem?: { serviceName: string }): void {

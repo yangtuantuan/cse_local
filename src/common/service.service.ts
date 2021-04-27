@@ -77,6 +77,7 @@ export class ServiceService {
               item.instances.forEach((instance: any) => {
                 instance.serviceName = item.microService.serviceName;
                 instance.environment = item.microService.environment || '';
+                instance.status = instance.status || 'UP';
               });
               list = list.concat(item.instances);
             }
@@ -170,5 +171,72 @@ export class ServiceService {
         'x-domain-name': DOMAON_NAME,
       },
     });
+  }
+
+  setInstanceStatus(
+    serviceId: string,
+    instanceId: string,
+    status: string // UP在线,OUTOFSERVICE摘机,STARTING正在启动,DOWN下线,TESTING拨测状态。
+  ): Observable<any> {
+    return this.http.put(
+      `${REGISTRY_PREFIX}/microservices/${serviceId}/instances/${instanceId}/status`,
+      null,
+      {
+        headers: {
+          'x-domain-name': DOMAON_NAME,
+        },
+        params: {
+          value: status,
+        },
+      }
+    );
+  }
+
+  getServiceTags(serviceId: string): Observable<any> {
+    return this.http.get(`${REGISTRY_PREFIX}/microservices/${serviceId}/tags`, {
+      headers: {
+        'x-domain-name': DOMAON_NAME,
+      },
+    });
+    // /v4​/{project}​/registry​/microservices​/{serviceId}​/tags
+  }
+
+  postServiceTags(
+    serviceId: string,
+    tags: { [key: string]: string }
+  ): Observable<any> {
+    return this.http.post(
+      `${REGISTRY_PREFIX}/microservices/${serviceId}/tags`,
+      {
+        tags,
+      },
+      {
+        headers: {
+          'x-domain-name': DOMAON_NAME,
+        },
+      }
+    );
+    // /v4​/{project}​/registry​/microservices​/{serviceId}​/tags
+  }
+
+  putServiceTag(
+    serviceId: string,
+    key: string,
+    value: string
+  ): Observable<any> {
+    return this.http.post(
+      `${REGISTRY_PREFIX}/microservices/${serviceId}/tags`,
+      null,
+      {
+        headers: {
+          'x-domain-name': DOMAON_NAME,
+        },
+        params: {
+          key,
+          value,
+        },
+      }
+    );
+    // /v4​/{project}​/registry​/microservices​/{serviceId}​/tags
   }
 }

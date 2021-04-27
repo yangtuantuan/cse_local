@@ -8,13 +8,10 @@ const routes: Routes = [
     pathMatch: 'full',
     component: ServiceListComponent,
   },
-  {
-    
-  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ServiceListRoutingModule { }
+export class ServiceListRoutingModule {}

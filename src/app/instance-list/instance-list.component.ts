@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TableWidthConfig } from 'ng-devui';
+import { DialogService, ModalService, TableWidthConfig } from 'ng-devui';
 import { ServiceService } from 'src/common/service.service';
-import { ActionItem } from '../shared/components/action-menu/action-menu.component';
+import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
+import { ActionItem } from '../shared/action-menu/action-menu.module';
 
 @Component({
   selector: 'app-instance-list',
@@ -9,6 +10,11 @@ import { ActionItem } from '../shared/components/action-menu/action-menu.compone
   styleUrls: ['./instance-list.component.less'],
 })
 export class InstanceListComponent implements OnInit {
+  constructor(
+    private service: ServiceService,
+    private dialog: DialogService,
+    private module: ModalService
+  ) {}
   title = '实例列表';
 
   basicDataSource = [];
@@ -49,12 +55,6 @@ export class InstanceListComponent implements OnInit {
       fieldType: 'text',
       order: 6,
     },
-    // {
-    //   field: 'operation',
-    //   header: '操作',
-    //   fieldType: 'text',
-    //   order: 4,
-    // },
   ];
   tableWidthConfig: TableWidthConfig[] = [
     {
@@ -63,32 +63,15 @@ export class InstanceListComponent implements OnInit {
     },
   ];
 
-  actions: ActionItem[] = [
-    {
-      id: '1',
-      label: 'aaa',
-    },
-    {
-      id: '2',
-      label: 'bbb',
-    },
-    {
-      id: '3',
-      label: 'ccc',
-    },
-    {
-      id: '4',
-      label: 'dddd',
-    },
-  ];
-
-  constructor(private service: ServiceService) {}
-
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData(): void {
+    this.basicDataSource = [];
     this.service.getInstances().subscribe(
       (res) => {
         this.basicDataSource = res;
-        console.log(res);
       },
       (err) => {
         // todo 提示
@@ -96,11 +79,85 @@ export class InstanceListComponent implements OnInit {
     );
   }
 
-  actionsFn(): ActionItem[] {
-    return JSON.parse(JSON.stringify(this.actions));
+  actionFn(rowItem: any): ActionItem[] {
+    // UP在线,OUTOFSERVICE摘机,STARTING正在启动,DOWN下线,TESTING拨测状态。
+    const actions: ActionItem[] = [
+      {
+        id: 'DOWN',
+        label: '下线',
+        disabled: rowItem.status === 'DOWN',
+      },
+      {
+        id: 'tags',
+        label: '标签管理',
+      },
+      {
+        id: 'UP',
+        label: '上线',
+        disabled: rowItem.status === 'UP',
+      },
+      {
+        id: 'OUTOFSERVICE',
+        label: '摘机',
+        disabled: rowItem.status === 'OUTOFSERVICE',
+      },
+      {
+        id: 'TESTING',
+        label: '拨测',
+        disabled: rowItem.status === 'TESTING',
+      },
+    ];
+
+    return actions;
   }
 
-  actionClick(e: any): void {
-    console.log(e);
+  actionClick(e: ActionItem, rowItem: any): void {
+    if (e.id === 'tags') {
+      const results = this.module.open({
+        id: 'manage-tag',
+        component: ManageTagComponent,
+        width: '750px',
+        data: {
+          close: (res: boolean) => {
+            if (res) {
+              this.initData();
+            }
+            results.modalInstance.hide();
+          },
+        },
+      });
+    } else {
+      const results = this.dialog.open({
+        id: 'action-modal',
+        title: '提示',
+        content: `确认改变实例 "${rowItem.hostName}" 的状态为${e.label}?`,
+        buttons: [
+          {
+            text: '确定',
+            cssClass: 'danger',
+            handler: () => {
+              this.service
+                .setInstanceStatus(rowItem.serviceId, rowItem.instanceId, e.id)
+                .subscribe(
+                  (res: any) => {
+                    this.initData();
+                  },
+                  (err) => {
+                    // todo 错误提示
+                  }
+                );
+              results.modalInstance.hide();
+            },
+          },
+          {
+            text: '取消',
+            cssClass: 'common',
+            handler: () => {
+              results.modalInstance.hide();
+            },
+          },
+        ],
+      });
+    }
   }
 }

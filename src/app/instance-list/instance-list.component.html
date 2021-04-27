@@ -31,7 +31,12 @@
           }}
         </td>
         <td dTableCell>
-          <app-action-menu [actions]="actionsFn()" (meunClick)="actionClick($event)"></app-action-menu>
+          <app-action-menu
+            [actions]="actionFn(rowItem)"
+            [maxShowNum]="2"
+            [menuText]="'更多'"
+            (menuClick)="actionClick($event, rowItem)"
+          ></app-action-menu>
         </td>
       </tr>
     </ng-template>
