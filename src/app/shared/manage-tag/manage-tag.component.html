@@ -25,14 +25,14 @@
                 class="cursor-pointer"
               >
                 <span class="tips-icon icon-add"></span>
-                <span>Create new data</span>
+                <span>新建</span>
               </div>
               <div *ngIf="headerNewForm" class="edit-padding-fix">
                 <div class="input-block">
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.key"
-                    placeholder="firstName"
+                    placeholder="'请输入key'"
                     type="text"
                   />
                 </div>
@@ -40,15 +40,15 @@
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.value"
-                    placeholder="lastName"
+                    placeholder="请输入value"
                     type="text"
                   />
                 </div>
                 <d-button style="margin-right: 5px" (click)="quickRowAdded()"
-                  >Confirm</d-button
+                  >确定</d-button
                 >
                 <d-button bsStyle="common" (click)="quickRowCancel()"
-                  >Cancel</d-button
+                  >取消</d-button
                 >
               </div>
             </td>
@@ -75,7 +75,7 @@
                 *ngIf="!headerNewForm"
               >
                 <span class="tips-icon icon-add"></span>
-                <span>Create new data</span>
+                <span>新建</span>
               </div>
               <div
                 *ngIf="headerNewForm"
@@ -86,7 +86,7 @@
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.key"
-                    placeholder="firstName"
+                    [placeholder]="'请输入key'"
                     type="text"
                   />
                 </div>
@@ -94,15 +94,15 @@
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.value"
-                    placeholder="lastName"
+                    [placeholder]="'请输入value'"
                     type="text"
                   />
                 </div>
                 <d-button style="margin-right: 5px" (click)="quickRowAdded()"
-                  >Confirm</d-button
+                  >确定</d-button
                 >
                 <d-button bsStyle="common" (click)="quickRowCancel()"
-                  >Cancel</d-button
+                  >取消</d-button
                 >
               </div>
             </td>
@@ -113,8 +113,8 @@
   </div>
   <div class="footer">
     <d-button bsStyle="danger" (click)="onConfirmBtn()">确定</d-button>
-    <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg"
-      >取消</d-button
-    >
+    <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg">
+      取消
+    </d-button>
   </div>
 </div>

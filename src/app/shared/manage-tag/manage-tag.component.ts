@@ -55,7 +55,7 @@ export class ManageTagComponent implements OnInit {
     if (this.data?.serviceId) {
       this.service.getServiceTags(this.data.serviceId).subscribe(
         (res) => {
-          this.basicDataSource = Object.keys(res.tags).map((key) => {
+          this.basicDataSource = Object.keys(res?.tags || {}).map((key) => {
             return {
               key,
               value: res.tags[key],
@@ -76,23 +76,22 @@ export class ManageTagComponent implements OnInit {
   }
 
   quickRowAdded(): void {
-    const newData = { ...this.defaultRowData };
+    const dataIndex = (this.basicDataSource || []).findIndex(
+      (item: any) => item.id === this.defaultRowData.id
+    );
+    // 替换原值
+    if (dataIndex !== -1) {
+      this.basicDataSource[dataIndex] = this.defaultRowData;
+    } else {
+      // 添加新值
+      this.basicDataSource.unshift(this.defaultRowData);
+    }
+    this.headerNewForm = false;
     this.defaultRowData = {
       key: '',
       value: '',
       id: new Date().getTime().toString(),
     };
-    const dataIndex = this.basicDataSource.findIndex(
-      (item: any) => item.id === newData.id
-    );
-    // 替换原值
-    if (dataIndex !== -1) {
-      this.basicDataSource[dataIndex] = newData;
-    } else {
-      // 添加新值
-      this.basicDataSource.unshift(newData);
-    }
-    this.headerNewForm = false;
     this.eidteIndex = 0;
   }
 
