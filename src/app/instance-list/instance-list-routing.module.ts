@@ -5,7 +5,6 @@ import { InstanceListComponent } from './instance-list.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     component: InstanceListComponent,
   },
 ];

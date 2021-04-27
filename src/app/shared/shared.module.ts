@@ -11,18 +11,20 @@ import {
   SelectModule,
   TagsModule,
   TextareaModule,
-  ToggleModule,
-  DropDownModule,
+  ToggleModule
 } from 'ng-devui';
+import { DataTableModule } from 'ng-devui/data-table';
 import { CheckBoxModule } from 'ng-devui/checkbox';
 import { LayoutModule } from 'ng-devui/layout';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { ActionMenuModule } from './action-menu/action-menu.module';
+import { ManageTagModule } from './manage-tag/manage-tag.module';
 
 const devUIModule = [
   CategorySearchModule,
   CheckBoxModule,
   DevUIModule,
+  DataTableModule,
   FormModule,
   LayoutModule,
   ModalModule,
@@ -39,7 +41,7 @@ const angularModule = [
   ReactiveFormsModule,
 ];
 
-const cusModule = [ActionMenuModule];
+const cusModule = [ActionMenuModule, ManageTagModule];
 
 @NgModule({
   declarations: [],

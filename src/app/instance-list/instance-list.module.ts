@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { InstanceListRoutingModule } from './instance-list-routing.module';
-import { ManageTagModule } from '../shared/manage-tag/manage-tag.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, InstanceListRoutingModule, ManageTagModule],
+  imports: [SharedModule, InstanceListRoutingModule],
+  exports: [InstanceListRoutingModule],
 })
 export class InstanceListModule {}

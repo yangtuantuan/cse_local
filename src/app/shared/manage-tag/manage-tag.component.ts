@@ -76,15 +76,16 @@ export class ManageTagComponent implements OnInit {
   }
 
   quickRowAdded(): void {
-    const dataIndex = (this.basicDataSource || []).findIndex(
+    const data = cloneDeep(this.basicDataSource || []);
+    const dataIndex = data.findIndex(
       (item: any) => item.id === this.defaultRowData.id
     );
     // 替换原值
     if (dataIndex !== -1) {
-      this.basicDataSource[dataIndex] = this.defaultRowData;
+      data[dataIndex] = this.defaultRowData;
     } else {
       // 添加新值
-      this.basicDataSource.unshift(this.defaultRowData);
+      data.unshift(this.defaultRowData);
     }
     this.headerNewForm = false;
     this.defaultRowData = {
@@ -93,6 +94,7 @@ export class ManageTagComponent implements OnInit {
       id: new Date().getTime().toString(),
     };
     this.eidteIndex = 0;
+    this.basicDataSource = data;
   }
 
   quickRowCancel(): void {

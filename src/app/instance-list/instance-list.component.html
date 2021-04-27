@@ -23,13 +23,12 @@
       let-nestedIndex="nestedIndex"
     >
       <tr dTableRow>
-        <td dTableCell *ngFor="let colOption of columns">
-          {{
-            colOption.fieldType === "date"
-              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
-              : rowItem[colOption.field]
-          }}
-        </td>
+        <td dTableCell>{{rowItem.hostName}}</td>
+        <td dTableCell>{{rowItem.status | InstanceStatus}}</td>
+        <td dTableCell>{{rowItem.environment}}</td>
+        <td dTableCell>{{rowItem.serviceName}}</td>
+        <td dTableCell>{{rowItem.version}}</td>
+        <td dTableCell>{{rowItem.modTimestamp | dDatePipe: "y/M/d HH:mm:ss zzzz"}}</td>
         <td dTableCell>
           <app-action-menu
             [actions]="actionFn(rowItem)"
