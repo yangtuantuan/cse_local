@@ -64,21 +64,21 @@ export class ConfigService {
       },
     });
   }
-
-  getTagsByLables(labels: { [x: string]: any }): string[] {
-    const data = Object.keys(labels || {}).reduce(
-      (list: string[], key: string) => {
-        if (key) {
-          list.push(`${key}=${labels[key]}`);
-        }
-        return list;
-      },
-      []
-    );
-    return data;
-  }
 }
 
 interface KieItem {
   [name: string]: any;
 }
+
+export const getTagsByObj = (labels: { [x: string]: any }): string[] => {
+  const data = Object.keys(labels || {}).reduce(
+    (list: string[], key: string) => {
+      if (key) {
+        list.push(`${key}=${labels[key]}`);
+      }
+      return list;
+    },
+    []
+  );
+  return data;
+};

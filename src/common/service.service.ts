@@ -1,11 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-
+import { Observable, Subject } from 'rxjs';
 import {
   DOMAON_NAME,
-  REGISTRY_PREFIX,
   GOVERN_PREFIX,
+  REGISTRY_PREFIX,
 } from 'src/config/global.config';
 
 @Injectable({

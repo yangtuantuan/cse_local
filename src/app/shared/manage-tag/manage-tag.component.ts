@@ -11,7 +11,8 @@ import { ActionItem } from '../action-menu/action-menu.module';
 export class ManageTagComponent implements OnInit {
   @Input() data?: {
     close: (res?: boolean) => void;
-    serviceId: string;
+    serviceId?: string;
+    serviceName?: string;
   };
 
   constructor(private service: ServiceService) {}

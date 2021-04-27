@@ -1,8 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormLayout } from 'ng-devui';
+import { FormLayout, ModalService } from 'ng-devui';
+import { getTagsByObj } from 'src/common/config.service';
 import { ServiceService } from '../../common/service.service';
+import { ManageTagComponent } from '../shared/manage-tag/manage-tag.component';
 
 @Component({
   selector: 'app-service-detail',
@@ -13,7 +15,8 @@ export class ServiceDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ServiceService
+    private service: ServiceService,
+    private module: ModalService
   ) {
     this.serivceId = this.route.snapshot.paramMap.get('id') || '';
   }
@@ -31,28 +34,6 @@ export class ServiceDetailComponent implements OnInit {
   }
 
   initData(): void {
-    const params = {
-      options: 'all',
-    };
-    // this.service.getServiceByGovern(params).subscribe(
-    //   (res) => {
-    //     this.serviceData = res.allServicesDetail.reduce(
-    //       (list: any[], item: any) => {
-    //         if (item?.microService?.serviceId === this.serivceId) {
-    //           this.title = item.microService.serviceName;
-    //           list.push(item.microService);
-    //         }
-    //         return list;
-    //       },
-    //       []
-    //     );
-    //   },
-    //   (err) => {
-    //     // todo 提示
-    //     this.router.navigate(['servicelist']);
-    //   }
-    // );
-
     this.service.getServiceById(this.serivceId).subscribe(
       (res) => {
         this.serviceData = res.service || {};
@@ -60,6 +41,28 @@ export class ServiceDetailComponent implements OnInit {
           res.service.environment = '<空>';
         }
         this.title = res.service.serviceName;
+
+        const params = {
+          options: 'all',
+          serviceName: this.title,
+          appId: this.serviceData.appId,
+        };
+        this.service.getServiceByGovern(params).subscribe(
+          (res) => {
+            res.allServicesDetail.forEach((item: any) => {
+              if (item?.microService?.serviceId === this.serivceId) {
+                // this.title = item.microService.serviceName;
+                this.serviceData.tags = item.tags || {};
+                this.serviceData.instances = item.instances;
+              }
+            });
+            this.tags = getTagsByObj(this.serviceData.tags);
+          },
+          (err) => {
+            // todo 提示
+            this.router.navigate(['servicelist']);
+          }
+        );
       },
       (err) => {
         // todo 提示
@@ -69,5 +72,24 @@ export class ServiceDetailComponent implements OnInit {
 
   activeTabChange(event: any): void {
     console.log('switch to', event);
+  }
+
+  tags: string[] = [];
+
+  onTags() {
+    const results = this.module.open({
+      id: 'tags',
+      component: ManageTagComponent,
+      width: '750px',
+      data: {
+        close: (e?: boolean) => {
+          if (e) {
+            this.initData();
+          }
+          results.modalInstance.hide();
+        },
+        serviceId: this.serivceId,
+      },
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService, ICategorySearchTagItem, ModalService } from 'ng-devui';
-import { ConfigService } from '../../../../common/config.service';
+import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { CreateModalComponent } from '../../modal/create/create-modal.component';
 import { configTypeFn } from '../../pipe/config-type.pipe';
 
@@ -100,7 +100,7 @@ export class ConfigListComponent implements OnInit {
     this.service.getAllKies().subscribe(
       (data) => {
         this.basicDataSource = data.data.map((item) => {
-          item.labels_format = this.service.getTagsByLables(item.labels);
+          item.labels_format = getTagsByObj(item.labels);
           return item;
         });
       },

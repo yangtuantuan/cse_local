@@ -23,7 +23,7 @@
           <d-form-item>
             <d-form-label> 实例数 </d-form-label>
             <d-form-control class="form-control-width">
-              {{ serviceData?.instance?.length || 0 }}
+              {{ serviceData?.instances?.length || 0 }}
             </d-form-control>
           </d-form-item>
         </div>
@@ -55,7 +55,8 @@
           <d-form-item>
             <d-form-label> 框架 </d-form-label>
             <d-form-control class="form-control-width">
-              {{ serviceData?.framework?.name }}
+              {{ serviceData?.framework?.name }}&nbsp;&nbsp;
+              {{ '    ' + serviceData?.framework?.version }}
             </d-form-control>
           </d-form-item>
         </div>
@@ -84,7 +85,14 @@
           <d-form-item>
             <d-form-label> 标签 </d-form-label>
             <d-form-control class="form-control-width">
-              标签管理
+              <d-tag
+                *ngFor="let item of tags"
+                [tag]="item"
+                class="cse-mg-right-xs"
+              ></d-tag>
+              <d-button [bsStyle]="'text-dark'" (click)="onTags()">
+                标签管理
+              </d-button>
             </d-form-control>
           </d-form-item>
         </div>

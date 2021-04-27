@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormLayout, ModalService } from 'ng-devui';
 import { EditorComponent } from 'ngx-monaco-editor';
-import { ConfigService } from '../../../../common/config.service';
+import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { SelectAppComponent } from '../../modal/select-app/select-app.component';
 import { SelectServiceComponent } from '../../modal/select-service/select-service.component';
 
@@ -86,7 +86,7 @@ export class ConfigCreateComponent implements OnInit {
     if (this.kvId) {
       this.service.getKie(this.kvId).subscribe(
         (res) => {
-          this.tags = this.service.getTagsByLables(res.labels || {});
+          this.tags = getTagsByObj(res.labels || {});
           this.configName = res.key;
           this.code = res.value;
           this.status = res.status;
