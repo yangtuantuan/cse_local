@@ -129,18 +129,6 @@ export class ServiceService {
       (res) => {
         const result = res.allServicesDetail.reduce(
           (obj: { providers: any[]; consumers: any[] }, item: any) => {
-            if (item.providers?.length) {
-              item.providers.forEach((provider: any) => {
-                provider.serviceName = item.microService.serviceName;
-                provider.environment = item.microService.environment || '';
-              });
-            }
-            if (item.consumers?.length) {
-              item.consumers.forEach((consumer: any) => {
-                consumer.serviceName = item.microService.serviceName;
-                consumer.environment = item.microService.environment || '';
-              });
-            }
             obj = {
               providers: [...obj.providers, ...(item.providers || [])],
               consumers: [...obj.consumers, ...(item.consumers || [])],

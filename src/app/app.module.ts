@@ -5,11 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
-import { InstanceStatusPipe } from './shared/pipe/instance-status.pipe';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, InstanceListComponent, InstanceStatusPipe],
+  declarations: [AppComponent, InstanceListComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -17,7 +16,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AppRoutingModule,
   ],
-  providers: [InstanceStatusPipe],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

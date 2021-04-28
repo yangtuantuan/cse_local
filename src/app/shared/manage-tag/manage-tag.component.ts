@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { ServiceService } from 'src/common/service.service';
 import { ActionItem } from '../action-menu/action-menu.module';
+import { getTabelData } from '../toolFunction/tabel.pagination';
 
 @Component({
   selector: 'app-manage-tag',
@@ -18,7 +19,15 @@ export class ManageTagComponent implements OnInit {
   constructor(private service: ServiceService) {}
 
   basicDataSource: any;
+  dataSource: any;
   headerNewForm!: boolean;
+
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 5,
+    pageSizeOptions: [5, 10, 15],
+  };
 
   columns = [
     {
@@ -63,10 +72,13 @@ export class ManageTagComponent implements OnInit {
               id: new Date().getTime().toString() + key,
             };
           });
+          this.pager.total = this.basicDataSource.length;
+          this.dataSource = getTabelData(this.basicDataSource, this.pager);
         },
         (err) => {
           // todo 提示
           this.basicDataSource = [];
+          this.pager.total = 0;
         }
       );
     }
@@ -96,6 +108,8 @@ export class ManageTagComponent implements OnInit {
     };
     this.eidteIndex = 0;
     this.basicDataSource = data;
+    this.pager.total = data.length;
+    this.dataSource = getTabelData(data, this.pager);
   }
 
   quickRowCancel(): void {
@@ -134,6 +148,8 @@ export class ManageTagComponent implements OnInit {
           return item.id !== rowItem.id;
         }
       );
+      this.pager.total = this.basicDataSource.length;
+      this.dataSource = getTabelData(this.basicDataSource, this.pager);
     }
     if (action.id === 'edit') {
       this.eidteIndex = index;
@@ -161,5 +177,13 @@ export class ManageTagComponent implements OnInit {
 
   onCancel(): void {
     this.data?.close();
+  }
+
+  onPaginationChange(pageIndex: number, pageSise: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...this.pager,
+      pageIndex,
+      pageSise,
+    });
   }
 }

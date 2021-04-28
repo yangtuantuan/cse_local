@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TableWidthConfig } from 'ng-devui';
+import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
 import { ConfigService } from '../../../../common/config.service';
 
 @Component({
@@ -14,6 +15,14 @@ export class SelectAppComponent implements OnInit {
   constructor(private service: ConfigService) {}
 
   basicDataSource: any[] = [];
+  dataSource: any[] = [];
+
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 5,
+    pageSizeOptions: [5, 10, 15],
+  };
 
   selectId!: string;
 
@@ -24,11 +33,11 @@ export class SelectAppComponent implements OnInit {
     },
     {
       field: 'appId',
-      width: '150px',
+      width: '200px',
     },
     {
       field: 'enviroment',
-      width: '150px',
+      width: '200px',
     },
   ];
 
@@ -48,37 +57,28 @@ export class SelectAppComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    console.log('init');
-
     this.service.getApps().subscribe(
       (res) => {
+        this.basicDataSource = res;
+        this.pager.total = res.length;
+        this.dataSource = getTabelData(res, this.pager);
         console.log(res);
       },
       (err) => {
-        this.basicDataSource = [
-          {
-            appId: 'sdfasfdsadf-13232',
-            enviroment: '',
-            instanceCount: 5,
-            serviceCount: 4,
-            timestamp: 161915867,
-          },
-          {
-            appId: 'asdfhjghdj-13232',
-            enviroment: '',
-            instanceCount: 0,
-            serviceCount: 1,
-            timestamp: 161915894,
-          },
-        ].map((item: any, index: number) => {
-          if (index === 0) {
-            this.selectId = item.appId;
-          }
-          return item;
-        });
-        console.log(err);
+        this.basicDataSource = [];
+        this.pager.total = 0;
+        this.dataSource = [];
+        // todo  提示
       }
     );
+  }
+
+  onPaginationChange(pageIndex: number, pageSise: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...this.pager,
+      pageIndex,
+      pageSise,
+    });
   }
 
   onConfirm(): void {

@@ -3,7 +3,7 @@
   <div class="content">
     <d-data-table
       #datatable
-      [dataSource]="basicDataSource"
+      [dataSource]="dataSource"
       [scrollable]="true"
       [headerBg]="true"
       [type]="'striped'"
@@ -17,10 +17,16 @@
       </thead>
       <tbody dTableBody>
         <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
-          <tr dTableRow *ngIf="rowIndex === eidteIndex">
+          <tr
+            dTableRow
+            *ngIf="
+              rowIndex === eidteIndex &&
+              (headerNewForm || pager.pageIndex === 1)
+            "
+          >
             <td dTableCell [attr.colspan]="columns.length">
               <div
-                *ngIf="!headerNewForm"
+                *ngIf="!headerNewForm && pager.pageIndex === 1"
                 (click)="newRow()"
                 class="cursor-pointer"
               >
@@ -32,7 +38,7 @@
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.key"
-                    placeholder="'请输入key'"
+                    [placeholder]="'请输入key'"
                     type="text"
                   />
                 </div>
@@ -40,7 +46,7 @@
                   <input
                     class="devui-form-control"
                     [(ngModel)]="defaultRowData.value"
-                    placeholder="请输入value"
+                    [placeholder]="'请输入value'"
                     type="text"
                   />
                 </div>
@@ -110,6 +116,21 @@
         </ng-template>
       </tbody>
     </d-data-table>
+    <d-pagination
+      class="cse-mg-top-xs"
+      *ngIf="pager.total > pager.pageSizeOptions[0]"
+      [size]="'sm'"
+      [total]="pager.total"
+      [(pageSize)]="pager.pageSize"
+      [(pageIndex)]="pager.pageIndex"
+      [canViewTotal]="true"
+      [canChangePageSize]="true"
+      [pageSizeOptions]="pager.pageSizeOptions"
+      [maxItems]="5"
+      (pageIndexChange)="onPaginationChange($event, pager.pageSize)"
+      (pageSizeChange)="onPaginationChange(pager.pageIndex, $event)"
+    >
+    </d-pagination>
   </div>
   <div class="footer">
     <d-button bsStyle="danger" (click)="onConfirmBtn()">确定</d-button>

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { basicDataSource } from 'mock/serviceList.mock';
 import {
   DataTableComponent,
   TableCheckOptions,
@@ -10,6 +9,8 @@ import { CreateComponent } from './modal/create/create.component';
 import { DeleteComponent } from './modal/delete/delete.component';
 import { ServiceService } from '../../common/service.service';
 import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
+import { getTabelData } from '../shared/toolFunction/tabel.pagination';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-service-list',
@@ -28,34 +29,33 @@ export class ServiceListComponent implements OnInit {
   title = '服务列表';
 
   basicDataSource: any;
-  dataTableOptions = {
-    columns: [
-      {
-        field: 'environment',
-        header: 'Environment',
-        fieldType: 'text',
-        order: 2,
-      },
-      {
-        field: 'version',
-        header: 'Version',
-        fieldType: 'text',
-        order: 3,
-      },
-      {
-        field: 'appId',
-        header: 'Instances',
-        fieldType: 'text',
-        order: 4,
-      },
-      {
-        field: 'timestamp',
-        header: 'Create Time',
-        fieldType: 'Date',
-        order: 5,
-      },
-    ],
-  };
+  dataSource: any; // 展示的数据
+  columns = [
+    {
+      field: 'environment',
+      header: 'Environment',
+      fieldType: 'text',
+      order: 2,
+    },
+    {
+      field: 'version',
+      header: 'Version',
+      fieldType: 'text',
+      order: 3,
+    },
+    {
+      field: 'appId',
+      header: 'Instances',
+      fieldType: 'text',
+      order: 4,
+    },
+    {
+      field: 'timestamp',
+      header: 'Create Time',
+      fieldType: 'Date',
+      order: 5,
+    },
+  ];
 
   tableWidthConfig: TableWidthConfig[] = [
     {
@@ -68,15 +68,15 @@ export class ServiceListComponent implements OnInit {
     },
     {
       field: 'environment',
-      width: '150px',
+      width: '100px',
     },
     {
       field: 'version',
-      width: '150px',
+      width: '100px',
     },
     {
       field: 'instances',
-      width: '200px',
+      width: '150px',
     },
     {
       field: 'operation',
@@ -97,8 +97,8 @@ export class ServiceListComponent implements OnInit {
   pager = {
     total: 0,
     pageIndex: 1,
-    pageSize: 6,
-    pageSizeOptions: [5, 10, 15, 20],
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 20, 50],
   };
 
   ngOnInit(): void {
@@ -112,13 +112,13 @@ export class ServiceListComponent implements OnInit {
       (data) => {
         this.basicDataSource = (data?.allServicesDetail || []).map(
           (item: any) => {
-            if (!item?.microService?.environment) {
-              item.microService.environment = '<空>';
-            }
             return item.microService;
           }
         );
-        this.pager.total = basicDataSource.length;
+        this.dataSource = getTabelData(this.basicDataSource, this.pager);
+        console.log(this.dataSource, this.basicDataSource);
+
+        this.pager.total = this.basicDataSource.length;
       },
       (err) => {
         // todo 提示
@@ -191,9 +191,12 @@ export class ServiceListComponent implements OnInit {
     this.totalDataChecked = false;
   }
 
-  public onPageIndexChange(pageIndex: number): void {
-    const data = JSON.parse(JSON.stringify(this.basicDataSource));
-    this.basicDataSource = data.slice(pageIndex - 1, pageIndex + 5);
+  public onPaginationChange(pageIndex: number, pageSize: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...cloneDeep(this.pager),
+      pageIndex,
+      pageSize,
+    });
     setTimeout(() => {
       if (this.totalDataChecked) {
         this.datatable.setTableCheckStatus({

@@ -11,7 +11,7 @@ import {
   SelectModule,
   TagsModule,
   TextareaModule,
-  ToggleModule
+  ToggleModule,
 } from 'ng-devui';
 import { DataTableModule } from 'ng-devui/data-table';
 import { CheckBoxModule } from 'ng-devui/checkbox';
@@ -19,6 +19,9 @@ import { LayoutModule } from 'ng-devui/layout';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { ActionMenuModule } from './action-menu/action-menu.module';
 import { ManageTagModule } from './manage-tag/manage-tag.module';
+import { InstanceStatusPipe } from './pipe/instance-status.pipe';
+import { EnvironmentPipe } from './pipe/environment.pipe';
+import { AutoHidePaginationDirective } from './derective/auto-hide-pagination.derective';
 
 const devUIModule = [
   CategorySearchModule,
@@ -43,14 +46,25 @@ const angularModule = [
 
 const cusModule = [ActionMenuModule, ManageTagModule];
 
+const pipes = [InstanceStatusPipe, EnvironmentPipe];
+
+const derective = [AutoHidePaginationDirective];
+
 @NgModule({
-  declarations: [],
+  declarations: [...pipes, ...derective],
   imports: [
     ...devUIModule,
     ...angularModule,
     ...cusModule,
     MonacoEditorModule.forRoot(),
   ],
-  exports: [...devUIModule, ...angularModule, ...cusModule, MonacoEditorModule],
+  exports: [
+    ...devUIModule,
+    ...angularModule,
+    ...cusModule,
+    ...pipes,
+    ...derective,
+    MonacoEditorModule,
+  ],
 })
 export class SharedModule {}

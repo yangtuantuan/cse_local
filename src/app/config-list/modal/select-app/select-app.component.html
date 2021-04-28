@@ -3,7 +3,7 @@
 
   <div class="container">
     <d-data-table
-      [dataSource]="basicDataSource"
+      [dataSource]="dataSource"
       [scrollable]="true"
       [type]="'striped'"
       [tableWidthConfig]="tableWidthConfig"
@@ -22,19 +22,33 @@
           <tr dTableRow style="line-height: 100%">
             <td dTableCell field="radio">
               <d-radio
-                style="vertical-align: middle; padding-right: 0"
+                style="vertical-align: middle; padding-right: 0; width: 50px"
                 [name]="'radio'"
                 [(ngModel)]="selectId"
                 [value]="rowItem.appId"
               ></d-radio>
             </td>
-            <td dTableCell *ngFor="let colOption of columns">
-              {{ rowItem[colOption.field] }}
-            </td>
+            <td>{{ rowItem.appId }}</td>
+            <td>{{ rowItem.environment | EnvironmentPipe }}</td>
           </tr>
         </ng-template>
       </tbody>
     </d-data-table>
+    <d-pagination
+      class="cse-mg-top-xs"
+      *ngIf="pager.total > pager.pageSizeOptions[0]"
+      [size]="'sm'"
+      [total]="pager.total"
+      [(pageSize)]="pager.pageSize"
+      [(pageIndex)]="pager.pageIndex"
+      [canViewTotal]="true"
+      [canChangePageSize]="true"
+      [pageSizeOptions]="pager.pageSizeOptions"
+      [maxItems]="5"
+      (pageIndexChange)="onPaginationChange($event, pager.pageSize)"
+      (pageSizeChange)="onPaginationChange(pager.pageIndex, $event)"
+    >
+    </d-pagination>
   </div>
   <div class="footer">
     <d-button bsStyle="danger" (click)="onConfirm()">确定</d-button>

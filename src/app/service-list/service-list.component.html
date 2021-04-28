@@ -10,13 +10,14 @@
 </div>
 
 <d-data-table
-  [dataSource]="basicDataSource"
+  [dataSource]="dataSource"
   [tableWidthConfig]="tableWidthConfig"
+  [headerBg]="true"
 >
   <thead dTableHead [checkable]="true" [checkOptions]="checkOptions">
     <tr dTableRow>
       <th dHeadCell width="150px">Name</th>
-      <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
+      <th dHeadCell *ngFor="let colOption of columns">
         {{ colOption.header }}
       </th>
       <th dHeadCell width="150px">Operation</th>
@@ -44,12 +45,17 @@
             {{ rowItem.serviceName }}
           </a>
         </td>
-        <td dTableCell *ngFor="let colOption of dataTableOptions.columns">
-          {{
-            colOption.fieldType === "date"
-              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
-              : rowItem[colOption.field]
-          }}
+        <td dTableCall>
+          {{ rowItem.environment | EnvironmentPipe }}
+        </td>
+        <td dTableCall>
+          {{ rowItem.version }}
+        </td>
+        <td dTableCall>
+          {{ rowItem.appId }}
+        </td>
+        <td dTableCall>
+          {{ rowItem.timestamp | dDatePipe: "y/M/d HH:mm:ss zzzz" }}
         </td>
         <td dTableCell>
           <d-button bsStyle="text" (click)="manageTag(rowItem)"
@@ -71,17 +77,17 @@
   </tbody>
 </d-data-table>
 <d-pagination
-  *ngIf="pager.total > pager.pageSizeOptions[0]"
-  class="page-nation"
+  class="cse-mg-top-xs"
+  [autoHide]="true"
   [size]="'sm'"
   [total]="pager.total"
-  [pageSize]="pager.pageSize"
-  [showPageSelector]="false"
-  [totalItemText]="'总条数'"
-  [pageSizeOptions]="pager.pageSizeOptions"
+  [(pageSize)]="pager.pageSize"
   [(pageIndex)]="pager.pageIndex"
   [canViewTotal]="true"
-  [lite]="true"
-  (pageIndexChange)="onPageIndexChange($event)"
+  [canChangePageSize]="true"
+  [pageSizeOptions]="pager.pageSizeOptions"
+  [maxItems]="5"
+  (pageIndexChange)="onPaginationChange($event, pager.pageSize)"
+  (pageSizeChange)="onPaginationChange(pager.pageIndex, $event)"
 >
 </d-pagination>

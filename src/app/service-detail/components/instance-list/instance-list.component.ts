@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DialogService } from 'ng-devui';
+import { ActionItem } from 'src/app/shared/action-menu/action-menu.module';
 import { ServiceService } from 'src/common/service.service';
 
 @Component({
@@ -8,11 +10,15 @@ import { ServiceService } from 'src/common/service.service';
   styleUrls: ['./instance-list.component.less'],
 })
 export class InstanceListComponent implements OnInit {
-  constructor(private service: ServiceService, private route: ActivatedRoute) {
-    this.serviceId = this.route.snapshot.paramMap.get('id');
+  constructor(
+    private service: ServiceService,
+    private route: ActivatedRoute,
+    private dialog: DialogService
+  ) {
+    this.serviceId = this.route.snapshot.paramMap.get('id') as string;
   }
 
-  serviceId: string | null;
+  serviceId: string;
   basicDataSource: any[] = [];
 
   columns = [
@@ -24,7 +30,7 @@ export class InstanceListComponent implements OnInit {
     },
     {
       field: 'status',
-      header: '实例名称',
+      header: '实例状态',
       fieldType: 'text',
       width: '150px',
     },
@@ -43,17 +49,27 @@ export class InstanceListComponent implements OnInit {
     {
       field: 'modTimestamp',
       header: '更新时间',
+      fieldType: 'date',
+      width: '300px',
+    },
+    {
+      field: 'operation',
+      header: '操作',
       fieldType: 'text',
-      width: '150px',
+      width: '200px',
     },
   ];
 
   ngOnInit(): void {
-    if (this.serviceId) {
-      this.service.getInstancesbyServiceId(this.serviceId).subscribe(
+    this.initData(this.serviceId);
+  }
+
+  initData(serviceId: string): void {
+    this.basicDataSource = [];
+    if (serviceId) {
+      this.service.getInstancesbyServiceId(serviceId).subscribe(
         (res) => {
           this.basicDataSource = res.instances;
-          console.log(res);
         },
         (err) => {
           // todo 提示
@@ -63,4 +79,66 @@ export class InstanceListComponent implements OnInit {
   }
 
   onToggle(e?: any): void {}
+
+  actionFn(rowItem: any): ActionItem[] {
+    // UP在线,OUTOFSERVICE摘机,STARTING正在启动,DOWN下线,TESTING拨测状态。
+    const actions: ActionItem[] = [
+      {
+        id: 'DOWN',
+        label: '下线',
+        disabled: rowItem.status === 'DOWN',
+      },
+      {
+        id: 'UP',
+        label: '上线',
+        disabled: rowItem.status === 'UP',
+      },
+      {
+        id: 'OUTOFSERVICE',
+        label: '摘机',
+        disabled: rowItem.status === 'OUTOFSERVICE',
+      },
+      {
+        id: 'TESTING',
+        label: '拨测',
+        disabled: rowItem.status === 'TESTING',
+      },
+    ];
+
+    return actions;
+  }
+
+  actionClick(e: ActionItem, rowItem: any): void {
+    const results = this.dialog.open({
+      id: 'action-modal',
+      title: '提示',
+      content: `确认改变实例 "${rowItem.hostName}" 的状态为${e.label}?`,
+      buttons: [
+        {
+          text: '确定',
+          cssClass: 'danger',
+          handler: () => {
+            this.service
+              .setInstanceStatus(this.serviceId, rowItem.instanceId, e.id)
+              .subscribe(
+                (res: any) => {
+                  this.initData(this.serviceId);
+                },
+                (err) => {
+                  // todo 错误提示
+                }
+              );
+            results.modalInstance.hide();
+          },
+        },
+        {
+          text: '取消',
+          cssClass: 'common',
+          handler: () => {
+            results.modalInstance.hide();
+          },
+        },
+      ],
+    });
+  }
 }

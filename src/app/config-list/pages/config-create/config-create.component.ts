@@ -122,7 +122,7 @@ export class ConfigCreateComponent implements OnInit {
             this.appId = rowItem.appId;
             this.tags = [
               `app=${rowItem.appId}`,
-              `enviroment=${rowItem.enviroment}`,
+              `enviroment=${rowItem.environment}`,
             ];
           }
           results.modalInstance.hide();

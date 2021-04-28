@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormLayout, ModalService } from 'ng-devui';
@@ -27,6 +26,8 @@ export class ServiceDetailComponent implements OnInit {
   formLayout = FormLayout;
   acticeTabId!: any;
 
+  tags!: string[];
+
   ngOnInit(): void {
     if (this.serivceId) {
       this.initData();
@@ -37,9 +38,6 @@ export class ServiceDetailComponent implements OnInit {
     this.service.getServiceById(this.serivceId).subscribe(
       (res) => {
         this.serviceData = res.service || {};
-        if (!res.service?.environment) {
-          res.service.environment = '<空>';
-        }
         this.title = res.service.serviceName;
 
         const params = {
@@ -48,8 +46,8 @@ export class ServiceDetailComponent implements OnInit {
           appId: this.serviceData.appId,
         };
         this.service.getServiceByGovern(params).subscribe(
-          (res) => {
-            res.allServicesDetail.forEach((item: any) => {
+          (data) => {
+            data.allServicesDetail.forEach((item: any) => {
               if (item?.microService?.serviceId === this.serivceId) {
                 // this.title = item.microService.serviceName;
                 this.serviceData.tags = item.tags || {};
@@ -74,9 +72,7 @@ export class ServiceDetailComponent implements OnInit {
     console.log('switch to', event);
   }
 
-  tags: string[] = [];
-
-  onTags() {
+  onTags(): void {
     const results = this.module.open({
       id: 'tags',
       component: ManageTagComponent,

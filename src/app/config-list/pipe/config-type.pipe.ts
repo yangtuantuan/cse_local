@@ -1,19 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'configType',
+  name: 'ConfigTypePipe',
 })
 export class ConfigTypePipe implements PipeTransform {
   transform(value: Lables): string {
-    return configTypeFn(value);
+    return types[configTypeFn(value)];
   }
 }
 
-interface Lables {
-  [lable: string]: string;
-}
-
-export const configTypeFn = (value: Lables): 'custom' | 'service' | 'app' => {
+export const configTypeFn = (value: Lables): type => {
   if (!value) {
     return 'custom';
   }
@@ -30,3 +26,21 @@ export const configTypeFn = (value: Lables): 'custom' | 'service' | 'app' => {
   }
   return 'custom';
 };
+
+const types = {
+  app: '应用级配置',
+  custom: '自定义配置',
+  service: '微服务级配置',
+};
+
+interface Lables {
+  [lable: string]: string;
+}
+
+interface Types {
+  app: string;
+  custom: string;
+  service: string;
+}
+
+type type = keyof Types;

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DialogService, ICategorySearchTagItem, ModalService } from 'ng-devui';
 import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { CreateModalComponent } from '../../modal/create/create-modal.component';
-import { configTypeFn } from '../../pipe/config-type.pipe';
 
 @Component({
   selector: 'app-config-list',

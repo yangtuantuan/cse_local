@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DataTableModule, DevUIModule, FormModule } from 'ng-devui';
+import {
+  DataTableModule,
+  DevUIModule,
+  FormModule,
+  PaginationModule,
+} from 'ng-devui';
 import { ActionMenuModule } from '../action-menu/action-menu.module';
 import { ManageTagComponent } from './manage-tag.component';
 
@@ -13,6 +18,7 @@ import { ManageTagComponent } from './manage-tag.component';
     FormModule,
     FormsModule,
     DevUIModule,
+    PaginationModule,
     ActionMenuModule,
   ],
   exports: [ManageTagComponent],

@@ -88,10 +88,6 @@ export class InstanceListComponent implements OnInit {
         disabled: rowItem.status === 'DOWN',
       },
       {
-        id: 'tags',
-        label: '标签管理',
-      },
-      {
         id: 'UP',
         label: '上线',
         disabled: rowItem.status === 'UP',
@@ -112,52 +108,36 @@ export class InstanceListComponent implements OnInit {
   }
 
   actionClick(e: ActionItem, rowItem: any): void {
-    if (e.id === 'tags') {
-      const results = this.module.open({
-        id: 'manage-tag',
-        component: ManageTagComponent,
-        width: '750px',
-        data: {
-          close: (res: boolean) => {
-            if (res) {
-              this.initData();
-            }
+    const results = this.dialog.open({
+      id: 'action-modal',
+      title: '提示',
+      content: `确认改变实例 "${rowItem.hostName}" 的状态为${e.label}?`,
+      buttons: [
+        {
+          text: '确定',
+          cssClass: 'danger',
+          handler: () => {
+            this.service
+              .setInstanceStatus(rowItem.serviceId, rowItem.instanceId, e.id)
+              .subscribe(
+                (res: any) => {
+                  this.initData();
+                },
+                (err) => {
+                  // todo 错误提示
+                }
+              );
             results.modalInstance.hide();
           },
         },
-      });
-    } else {
-      const results = this.dialog.open({
-        id: 'action-modal',
-        title: '提示',
-        content: `确认改变实例 "${rowItem.hostName}" 的状态为${e.label}?`,
-        buttons: [
-          {
-            text: '确定',
-            cssClass: 'danger',
-            handler: () => {
-              this.service
-                .setInstanceStatus(rowItem.serviceId, rowItem.instanceId, e.id)
-                .subscribe(
-                  (res: any) => {
-                    this.initData();
-                  },
-                  (err) => {
-                    // todo 错误提示
-                  }
-                );
-              results.modalInstance.hide();
-            },
+        {
+          text: '取消',
+          cssClass: 'common',
+          handler: () => {
+            results.modalInstance.hide();
           },
-          {
-            text: '取消',
-            cssClass: 'common',
-            handler: () => {
-              results.modalInstance.hide();
-            },
-          },
-        ],
-      });
-    }
+        },
+      ],
+    });
   }
 }

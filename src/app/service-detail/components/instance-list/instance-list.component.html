@@ -11,7 +11,6 @@
       <th dHeadCell *ngFor="let colOption of columns">
         {{ colOption.header }}
       </th>
-      <th dHeadCell>操作</th>
     </tr>
   </thead>
   <tbody dTableBody>
@@ -21,41 +20,19 @@
       let-nestedIndex="nestedIndex"
     >
       <tr dTableRow>
-        <td dTableCell *ngFor="let colOption of columns">
-          {{
-            colOption.fieldType === "date"
-              ? (rowItem[colOption.field] | dDatePipe: "y/M/d HH:mm:ss zzzz")
-              : rowItem[colOption.field]
-          }}
-        </td>
+        <td>{{ rowItem.hostName }}</td>
+        <td>{{ rowItem.status | InstanceStatus }}</td>
+        <td>{{ rowItem.az }}</td>
+        <td>{{ rowItem.endpoints }}</td>
+        <td>{{ rowItem.modTimestamp | dDatePipe: "y/M/d HH:mm:ss zzzz" }}</td>
         <td dTableCell>
-          <d-button bsStyle="text" >
-            标签管理
-          </d-button>
-          <d-button bsStyle="text" class="cse-mg-left-sm">删除</d-button>
-          <div
-            class="btn-group"
-            dDropDown
-            [trigger]="'hover'"
-            (toggleEvent)="onToggle($event)"
-            appendToBody
+          <app-action-menu
+            [actions]="actionFn(rowItem)"
+            [maxShowNum]="2"
+            [menuText]="'更多'"
+            (menuClick)="actionClick($event, rowItem)"
           >
-            <span
-              dDropDownToggle
-              class="icon icon-setup devui-dropdown-origin"
-            ></span>
-            <ul
-              dDropDownMenu
-              class="devui-dropdown-menu devui-scrollbar"
-              role="menu"
-            >
-              <li class="disabled" role="menuitem">
-                <a class="devui-dropdown-item disabled">Item 1</a>
-              </li>
-              <li role="menuitem"><a class="devui-dropdown-item">Item 2</a></li>
-              <li role="menuitem"><a class="devui-dropdown-item">Item 3</a></li>
-            </ul>
-          </div>
+          </app-action-menu>
         </td>
       </tr>
     </ng-template>
