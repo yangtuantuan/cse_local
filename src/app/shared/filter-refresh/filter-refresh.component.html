@@ -1,10 +1,17 @@
 <d-category-search
+  #categorySearch
   [category]="category"
   [allowClear]="true"
   [allowSave]="false"
   (selectedTagsChange)="onSelectedTagsChange($event)"
 >
 </d-category-search>
-<d-button bsStyle="text" class="cse-mg-left-md" (btnClick)="onRefresh()">
+<d-button
+  bsStyle="text-dark"
+  [bordered]="true"
+  class="cse-mg-left-md"
+  (btnClick)="onRefresh()"
+>
   <span class="icon icon-refresh"></span>
 </d-button>
+›

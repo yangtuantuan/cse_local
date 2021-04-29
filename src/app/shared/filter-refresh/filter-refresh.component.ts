@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { isArray } from 'lodash';
 import { ICategorySearchTagItem } from 'ng-devui';
 import { FilterItem } from '../toolFunction/tabel.pagination';
@@ -13,6 +20,8 @@ export class FilterRefreshComponent implements OnInit {
 
   @Output() selectedTagsChange = new EventEmitter();
   @Output() refresh = new EventEmitter();
+
+  @ViewChild('categorySearch') categorySearch: any;
 
   constructor() {}
 
@@ -30,6 +39,7 @@ export class FilterRefreshComponent implements OnInit {
     this.selectedTagsChange.emit(filters);
   }
   onRefresh(): void {
+    this.categorySearch.clearFilter();
     this.refresh.emit();
   }
 }
