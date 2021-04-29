@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { cloneDeep } from 'lodash';
+import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
 import { ServiceService } from 'src/common/service.service';
 
 @Component({
@@ -17,7 +19,14 @@ export class InvokedServiceComponent implements OnInit {
   }
 
   serviceId: string | null;
-  basicDataSource: any[] = [];
+  private basicDataSource: any[] = [];
+  dataSource: any;
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 5,
+    pageSizeOptions: [5, 10],
+  };
 
   columns = [
     {
@@ -66,5 +75,24 @@ export class InvokedServiceComponent implements OnInit {
         }
       );
     }
+  }
+
+  public onPaginationChange(pageIndex: number, pageSize: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...cloneDeep(this.pager),
+      pageIndex,
+      pageSize,
+    });
+    // setTimeout(() => {
+    //   if (this.totalDataChecked) {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: true,
+    //     });
+    //   } else {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: false,
+    //     });
+    //   }
+    // });
   }
 }

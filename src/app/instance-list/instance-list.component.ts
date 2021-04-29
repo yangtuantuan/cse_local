@@ -3,6 +3,7 @@ import { DialogService, ModalService, TableWidthConfig } from 'ng-devui';
 import { ServiceService } from 'src/common/service.service';
 import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
 import { ActionItem } from '../shared/action-menu/action-menu.module';
+import { getTabelData } from '../shared/toolFunction/tabel.pagination';
 
 @Component({
   selector: 'app-instance-list',
@@ -17,7 +18,14 @@ export class InstanceListComponent implements OnInit {
   ) {}
   title = '实例列表';
 
-  basicDataSource = [];
+  private basicDataSource = [];
+  dataSource: any[] = [];
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 5,
+    pageSizeOptions: [5, 10, 20, 50],
+  };
   columns = [
     {
       field: 'hostName',
@@ -68,10 +76,12 @@ export class InstanceListComponent implements OnInit {
   }
 
   initData(): void {
-    this.basicDataSource = [];
+    this.dataSource = [];
     this.service.getInstances().subscribe(
       (res) => {
         this.basicDataSource = res;
+        this.pager.total = res.length;
+        this.dataSource = getTabelData(this.basicDataSource, this.pager);
       },
       (err) => {
         // todo 提示

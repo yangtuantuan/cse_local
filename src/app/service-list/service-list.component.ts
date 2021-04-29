@@ -28,7 +28,7 @@ export class ServiceListComponent implements OnInit {
 
   title = '服务列表';
 
-  basicDataSource: any;
+  private basicDataSource: any;
   dataSource: any; // 展示的数据
   columns = [
     {

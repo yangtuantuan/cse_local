@@ -24,11 +24,7 @@
   <!-- <d-button bsStyle="text-dark" bsSize="lg" class="cse-mg-left-xs" icon="icon-refresh" (click)="onRefresh()"></d-button> -->
 </div>
 
-<d-data-table
-  [dataSource]="basicDataSource"
-  [scrollable]="true"
-  [type]="'striped'"
->
+<d-data-table [dataSource]="dataSource" [scrollable]="true" [type]="'striped'">
   <thead dTableHead>
     <tr dTableRow>
       <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
@@ -40,7 +36,7 @@
     <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
       <tr dTableRow>
         <td dTableCell>{{ rowItem.key }}</td>
-        <td dTableCell>{{ rowItem.status }}</td>
+        <td dTableCell>{{ rowItem.status | configStatusPipe }}</td>
         <td dTableCell>
           <d-tag
             *ngFor="let tag of rowItem.labels_format; let i = index"
@@ -86,3 +82,19 @@
     </ng-template>
   </tbody>
 </d-data-table>
+
+<d-pagination
+  class="cse-mg-top-xs"
+  [autoHide]="true"
+  [size]="'sm'"
+  [total]="pager.total"
+  [(pageSize)]="pager.pageSize"
+  [(pageIndex)]="pager.pageIndex"
+  [canViewTotal]="true"
+  [canChangePageSize]="true"
+  [pageSizeOptions]="pager.pageSizeOptions"
+  [maxItems]="5"
+  (pageIndexChange)="onPaginationChange($event, pager.pageSize)"
+  (pageSizeChange)="onPaginationChange(pager.pageIndex, $event)"
+>
+</d-pagination>

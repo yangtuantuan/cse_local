@@ -1,6 +1,6 @@
 <d-data-table
   #datatable
-  [dataSource]="basicDataSource"
+  [dataSource]="dataSource"
   [scrollable]="true"
   [type]="'striped'"
   [headerBg]="true"
@@ -42,3 +42,18 @@
     </ng-template>
   </tbody>
 </d-data-table>
+<d-pagination
+  class="cse-mg-top-xs"
+  [autoHide]="true"
+  [size]="'sm'"
+  [total]="pager.total"
+  [(pageSize)]="pager.pageSize"
+  [(pageIndex)]="pager.pageIndex"
+  [canViewTotal]="true"
+  [canChangePageSize]="true"
+  [pageSizeOptions]="pager.pageSizeOptions"
+  [maxItems]="5"
+  (pageIndexChange)="onPaginationChange($event, pager.pageSize)"
+  (pageSizeChange)="onPaginationChange(pager.pageIndex, $event)"
+>
+</d-pagination>

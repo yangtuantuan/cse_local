@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { cloneDeep } from 'lodash';
 import { DialogService } from 'ng-devui';
 import { ActionItem } from 'src/app/shared/action-menu/action-menu.module';
+import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
 import { ServiceService } from 'src/common/service.service';
 
 @Component({
@@ -19,7 +21,14 @@ export class InstanceListComponent implements OnInit {
   }
 
   serviceId: string;
-  basicDataSource: any[] = [];
+  private basicDataSource: any[] = [];
+  dataSource: any;
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 20, 50],
+  };
 
   columns = [
     {
@@ -65,11 +74,13 @@ export class InstanceListComponent implements OnInit {
   }
 
   initData(serviceId: string): void {
-    this.basicDataSource = [];
+    this.dataSource = [];
     if (serviceId) {
       this.service.getInstancesbyServiceId(serviceId).subscribe(
         (res) => {
           this.basicDataSource = res.instances;
+          this.pager = res.instances.length;
+          this.dataSource = getTabelData(this.basicDataSource, this.pager);
         },
         (err) => {
           // todo 提示
@@ -140,5 +151,24 @@ export class InstanceListComponent implements OnInit {
         },
       ],
     });
+  }
+
+  public onPaginationChange(pageIndex: number, pageSize: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...cloneDeep(this.pager),
+      pageIndex,
+      pageSize,
+    });
+    // setTimeout(() => {
+    //   if (this.totalDataChecked) {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: true,
+    //     });
+    //   } else {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: false,
+    //     });
+    //   }
+    // });
   }
 }

@@ -18,20 +18,14 @@
     "checkJs": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "mock": [
-        "./mock"
-      ],
-    }
+    "lib": ["es2018", "dom"],
+    "paths": {}
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": ["./src/*.ts"]
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { DialogService, ICategorySearchTagItem, ModalService } from 'ng-devui';
+import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
 import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { CreateModalComponent } from '../../modal/create/create-modal.component';
 
@@ -14,7 +16,8 @@ export class ConfigListComponent implements OnInit {
     private modalService: ModalService,
     private dialogService: DialogService
   ) {}
-  basicDataSource: any;
+  private basicDataSource: any;
+  dataSource: any;
   category: Array<ICategorySearchTagItem> | any = [
     {
       field: 'key',
@@ -91,6 +94,13 @@ export class ConfigListComponent implements OnInit {
     ],
   };
 
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 20, 50],
+  };
+
   ngOnInit(): void {
     this.onRefresh();
   }
@@ -102,6 +112,8 @@ export class ConfigListComponent implements OnInit {
           item.labels_format = getTagsByObj(item.labels);
           return item;
         });
+        this.pager.total = this.basicDataSource.length;
+        this.dataSource = getTabelData(this.basicDataSource, this.pager);
       },
       (err) => {
         console.log(err);
@@ -127,7 +139,7 @@ export class ConfigListComponent implements OnInit {
     const results = this.dialogService.open({
       id: 'forbidden',
       title: '提示',
-      content: '确认禁用xxx',
+      content: `确认禁用配置项 ${rowItem.key}`,
       width: '400px',
       buttons: [
         {
@@ -162,7 +174,7 @@ export class ConfigListComponent implements OnInit {
     const results = this.dialogService.open({
       id: 'forbidden',
       title: '提示',
-      content: '确认启用xxx',
+      content: `确认启用配置项 ${rowItem.key} `,
       width: '400px',
       buttons: [
         {
@@ -193,13 +205,13 @@ export class ConfigListComponent implements OnInit {
     };
   }
 
-  onDeleteItem(rowItem: { id: string }): void {
+  onDeleteItem(rowItem: { id: string; key: string }): void {
     const results = this.dialogService.open({
       id: 'deleteKie',
       width: '400px',
       showAnimate: true,
       title: '提示',
-      content: '你确定要删除xxx么？',
+      content: `你确定要删除配置项 ${rowItem.key}`,
       buttons: [
         {
           text: '确认',
@@ -220,6 +232,14 @@ export class ConfigListComponent implements OnInit {
           },
         },
       ],
+    });
+  }
+
+  onPaginationChange(pageIndex: number, pageSize: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...cloneDeep(this.pager),
+      pageIndex,
+      pageSize,
     });
   }
 }

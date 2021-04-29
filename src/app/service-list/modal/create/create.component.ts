@@ -6,6 +6,22 @@ const defaultOpetion = [
     id: '',
     label: '<空>',
   },
+  {
+    id: 'production',
+    label: 'production',
+  },
+  {
+    id: 'development',
+    label: 'development',
+  },
+  {
+    id: 'testing',
+    label: 'testing',
+  },
+  {
+    id: 'acceptance',
+    label: 'acceptance',
+  },
 ];
 
 @Component({

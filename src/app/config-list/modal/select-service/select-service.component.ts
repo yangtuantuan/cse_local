@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { TableWidthConfig } from 'ng-devui';
+import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
 import { ServiceService } from 'src/common/service.service';
 import { ConfigService } from '../../../../common/config.service';
 
@@ -18,7 +20,14 @@ export class SelectServiceComponent implements OnInit {
   ) {}
 
   selectService: any;
-  basicDataSource!: any[];
+  private basicDataSource!: any[];
+  dataSource!: any[];
+  pager = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 10,
+    pageSizeOptions: [5, 10],
+  };
   options!: any[];
   selectVersion!: any;
 
@@ -66,7 +75,9 @@ export class SelectServiceComponent implements OnInit {
     this.service.getServices().subscribe(
       (res) => {
         this.basicDataSource = simplify(res);
-        this.selectService = this.basicDataSource.find(
+        this.pager.total = this.basicDataSource.length;
+        this.dataSource = getTabelData(this.basicDataSource, this.pager);
+        this.selectService = this.dataSource.find(
           (item: any, index: number) => index === 0
         );
         this.onChangeService(this.selectService);
@@ -113,5 +124,24 @@ export class SelectServiceComponent implements OnInit {
 
   onCancel(): void {
     this.data.onClose();
+  }
+
+  public onPaginationChange(pageIndex: number, pageSize: number): void {
+    this.dataSource = getTabelData(this.basicDataSource, {
+      ...cloneDeep(this.pager),
+      pageIndex,
+      pageSize,
+    });
+    // setTimeout(() => {
+    //   if (this.totalDataChecked) {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: true,
+    //     });
+    //   } else {
+    //     this.datatable.setTableCheckStatus({
+    //       pageAllChecked: false,
+    //     });
+    //   }
+    // });
   }
 }

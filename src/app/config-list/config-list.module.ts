@@ -4,6 +4,7 @@ import { ConfigListComponent } from './pages/list/config-list.component';
 import { CreateModalComponent } from './modal/create/create-modal.component';
 import { ConfigCreateComponent } from './pages/config-create/config-create.component';
 import { ConfigTypePipe } from './pipe/config-type.pipe';
+import { ConfigStatusPipe } from './pipe/config-status.pipe';
 import { SelectAppComponent } from './modal/select-app/select-app.component';
 import { SelectServiceComponent } from './modal/select-service/select-service.component';
 import { ConfigListRoutingModule } from './config-list-routing.module';
@@ -12,6 +13,7 @@ import { ConfigListRoutingModule } from './config-list-routing.module';
   declarations: [
     ConfigListComponent,
     ConfigTypePipe,
+    ConfigStatusPipe,
     CreateModalComponent,
     ConfigCreateComponent,
     SelectAppComponent,
