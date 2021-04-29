@@ -1,12 +1,12 @@
 // tslint:disable:variable-name
 
-import { cloneDeep, isArray, isMatch, reduce } from 'lodash';
+import { cloneDeep, every, includes, isArray, isMatch, reduce } from 'lodash';
 
 export const getTabelData = (
   data: any[], // 原数据 已排序
   pageination: PaginationOptions // 分页配置
 ): any[] => {
-  let __data = filterTableData(data);
+  let __data = data || [];
   __data = __data.slice(
     (pageination.pageIndex - 1) * pageination.pageSize,
     pageination.pageIndex * pageination.pageSize
@@ -16,22 +16,20 @@ export const getTabelData = (
 
 export const filterTableData = (
   data: any[], // table数据
-  filter?: { [key: string]: any }[]
+  filters?: { [key: string]: any }[]
 ): any[] => {
   if (!isArray(data)) {
     return [];
   }
   let __data = cloneDeep(data || []);
-  __data = reduce(
-    __data,
-    (list: any[], item: any) => {
-      if (isMatch(item, filter || {})) {
-        list.push(item);
+  __data = __data.filter((item: any) => {
+    return every(filters, (filter: any) => {
+      if (isArray(filter.value)) {
+        return includes(filter.value, item[filter.field]);
       }
-      return list;
-    },
-    []
-  );
+      return includes(item[filter.field], filter.value);
+    });
+  });
   return __data;
 };
 
@@ -42,10 +40,41 @@ export const getShowPagination = (
   return total > minPageSize;
 };
 
+export const filterTabDataByCategory = (
+  data: any[], // 原数据 已排序
+  pageination: any, // 分页数据
+  filters: FilterItem[] // 过滤项
+): { data: any; pageination: any } => {
+  if (!filters.length) {
+    return {
+      data,
+      pageination: {
+        ...pageination,
+        total: data.length,
+        pageIndex: 1,
+      },
+    };
+  }
+  const __data = filterTableData(data, filters);
+  return {
+    data: __data,
+    pageination: {
+      ...pageination,
+      total: __data.length,
+      pageIndex: 1,
+    },
+  };
+};
+
 interface PaginationOptions {
   total: number;
   pageIndex: number;
   pageSize: number;
   pageSizeOptions: number[];
   [key: string]: any;
+}
+
+export interface FilterItem {
+  field: string;
+  value: string | any[];
 }

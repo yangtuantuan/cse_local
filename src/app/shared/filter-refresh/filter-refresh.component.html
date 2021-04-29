@@ -1,0 +1,10 @@
+<d-category-search
+  [category]="category"
+  [allowClear]="true"
+  [allowSave]="false"
+  (selectedTagsChange)="onSelectedTagsChange($event)"
+>
+</d-category-search>
+<d-button bsStyle="text" class="cse-mg-left-md" (btnClick)="onRefresh()">
+  <span class="icon icon-refresh"></span>
+</d-button>

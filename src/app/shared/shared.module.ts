@@ -22,6 +22,7 @@ import { ManageTagModule } from './manage-tag/manage-tag.module';
 import { InstanceStatusPipe } from './pipe/instance-status.pipe';
 import { EnvironmentPipe } from './pipe/environment.pipe';
 import { AutoHidePaginationDirective } from './derective/auto-hide-pagination.derective';
+import { FilterRefreshModule } from './filter-refresh/filter-refresh.module';
 
 const devUIModule = [
   CategorySearchModule,
@@ -44,7 +45,7 @@ const angularModule = [
   ReactiveFormsModule,
 ];
 
-const cusModule = [ActionMenuModule, ManageTagModule];
+const cusModule = [ActionMenuModule, ManageTagModule, FilterRefreshModule];
 
 const pipes = [InstanceStatusPipe, EnvironmentPipe];
 

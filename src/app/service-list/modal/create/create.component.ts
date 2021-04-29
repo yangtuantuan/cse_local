@@ -1,28 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { envOptions } from 'src/config/global.config';
 import { ServiceService } from '../../../../common/service.service';
-
-const defaultOpetion = [
-  {
-    id: '',
-    label: '<空>',
-  },
-  {
-    id: 'production',
-    label: 'production',
-  },
-  {
-    id: 'development',
-    label: 'development',
-  },
-  {
-    id: 'testing',
-    label: 'testing',
-  },
-  {
-    id: 'acceptance',
-    label: 'acceptance',
-  },
-];
 
 @Component({
   selector: 'app-create',
@@ -62,7 +40,7 @@ export class CreateComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.envOpetions = JSON.parse(JSON.stringify(defaultOpetion));
+    this.envOpetions = JSON.parse(JSON.stringify(envOptions));
     this.environment = this.envOpetions[0];
   }
 

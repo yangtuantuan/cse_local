@@ -1,16 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { cloneDeep, includes, isArray, isMatch, map, uniqBy } from 'lodash';
 import {
   DataTableComponent,
   TableCheckOptions,
   TableWidthConfig,
 } from 'ng-devui/data-table';
 import { DialogService, ModalService } from 'ng-devui/modal';
-import { CreateComponent } from './modal/create/create.component';
-import { DeleteComponent } from './modal/delete/delete.component';
+import { envOptions } from 'src/config/global.config';
 import { ServiceService } from '../../common/service.service';
 import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
-import { getTabelData } from '../shared/toolFunction/tabel.pagination';
-import { cloneDeep } from 'lodash';
+import {
+  FilterItem,
+  filterTabDataByCategory,
+  filterTableData,
+  getTabelData,
+} from '../shared/toolFunction/tabel.pagination';
+import { CreateComponent } from './modal/create/create.component';
+import { DeleteComponent } from './modal/delete/delete.component';
 
 @Component({
   selector: 'app-service-list',
@@ -101,6 +107,32 @@ export class ServiceListComponent implements OnInit {
     pageSizeOptions: [5, 10, 20, 50],
   };
 
+  // todo ui框架问题设置为any解决
+  category: any = [
+    {
+      field: 'serviceName',
+      label: '名称',
+      type: 'textInput',
+    },
+    {
+      field: 'environment',
+      label: '环境',
+      type: 'label',
+      options: cloneDeep(envOptions),
+    },
+    {
+      field: 'version',
+      label: '版本',
+      type: 'label',
+      options: [],
+    },
+    {
+      field: 'instances',
+      label: 'Instances',
+      type: 'textInput',
+    },
+  ];
+
   ngOnInit(): void {
     this.initData();
   }
@@ -115,10 +147,14 @@ export class ServiceListComponent implements OnInit {
             return item.microService;
           }
         );
-        this.dataSource = getTabelData(this.basicDataSource, this.pager);
-        console.log(this.dataSource, this.basicDataSource);
-
         this.pager.total = this.basicDataSource.length;
+        this.dataSource = getTabelData(this.basicDataSource, this.pager);
+        this.category[2].options = uniqBy(
+          map(this.basicDataSource, (item: any) => ({
+            label: item.version,
+          })),
+          'label'
+        );
       },
       (err) => {
         // todo 提示
@@ -225,5 +261,19 @@ export class ServiceListComponent implements OnInit {
         },
       },
     });
+  }
+
+  onSelectedTagsChange(e: FilterItem[]): void {
+    const { data, pageination } = filterTabDataByCategory(
+      this.basicDataSource,
+      this.pager,
+      e
+    );
+    this.pager = pageination;
+    this.dataSource = data;
+  }
+
+  onRefresh(): void {
+    this.initData();
   }
 }
