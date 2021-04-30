@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, flatten, map, uniq, uniqBy } from 'lodash';
 import { DialogService, ICategorySearchTagItem, ModalService } from 'ng-devui';
-import { getTabelData } from 'src/app/shared/toolFunction/tabel.pagination';
+import {
+  FilterItem,
+  filterTabDataByCategory,
+  getTabelData,
+} from 'src/app/shared/toolFunction/tabel.pagination';
 import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { CreateModalComponent } from '../../modal/create/create-modal.component';
 
@@ -22,22 +26,19 @@ export class ConfigListComponent implements OnInit {
     {
       field: 'key',
       label: '配置项',
-      options: [
-        {
-          label: 'aaaa',
-        },
-      ],
-      type: 'radio',
+      type: 'textInput',
     },
     {
-      field: 'configItem',
-      label: '配置项',
-      options: [
-        {
-          label: 'aaaa',
-        },
-      ],
-      type: 'radio',
+      field: 'status',
+      label: '状态',
+      options: [],
+      type: 'label',
+    },
+    {
+      field: 'labels_format',
+      label: '标签',
+      options: [],
+      type: 'label',
     },
   ];
 
@@ -114,6 +115,23 @@ export class ConfigListComponent implements OnInit {
         });
         this.pager.total = this.basicDataSource.length;
         this.dataSource = getTabelData(this.basicDataSource, this.pager);
+        this.category[1].options = uniqBy(
+          map(this.basicDataSource, (item: any) => ({
+            label: item.status,
+          })),
+          'label'
+        );
+
+        this.category[2].options = map(
+          uniq(
+            flatten(
+              map(this.basicDataSource, (item: any) => item.labels_format)
+            )
+          ),
+          (item) => ({
+            label: item,
+          })
+        );
       },
       (err) => {
         console.log(err);
@@ -241,5 +259,15 @@ export class ConfigListComponent implements OnInit {
       pageIndex,
       pageSize,
     });
+  }
+
+  onSelectedTagsChange(e: FilterItem[]): void {
+    const { data, tableData, pageination } = filterTabDataByCategory(
+      this.basicDataSource,
+      this.pager,
+      e
+    );
+    this.pager = pageination;
+    this.dataSource = tableData;
   }
 }

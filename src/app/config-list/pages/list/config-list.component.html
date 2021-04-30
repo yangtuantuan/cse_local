@@ -10,17 +10,12 @@
   </d-button>
 </div>
 <div class="header">
-  <d-category-search
+  <app-filter-refresh
     [category]="category"
-    class="category-search"
-  ></d-category-search>
-  <d-button
-    bsStyle="text-dark"
-    bsSize="lg"
-    class="cse-mg-left-xs"
-    icon="icon-search"
-    (click)="onRefresh()"
-  ></d-button>
+    (selectedTagsChange)="onSelectedTagsChange($event)"
+    (refresh)="onRefresh()"
+  >
+  </app-filter-refresh>
 </div>
 
 <d-data-table [dataSource]="dataSource" [scrollable]="true" [type]="'striped'">

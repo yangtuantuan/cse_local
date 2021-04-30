@@ -1,6 +1,14 @@
 // tslint:disable:variable-name
 
-import { cloneDeep, every, includes, isArray, isMatch, reduce } from 'lodash';
+import {
+  cloneDeep,
+  every,
+  includes,
+  isArray,
+  isMatch,
+  reduce,
+  some,
+} from 'lodash';
 
 export const getTabelData = (
   data: any[], // 原数据 已排序
@@ -24,6 +32,11 @@ export const filterTableData = (
   let __data = cloneDeep(data || []);
   __data = __data.filter((item: any) => {
     return every(filters, (filter: any) => {
+      if (isArray(filter.value) && isArray(item[filter.field])) {
+        return some(item[filter.field], (field) =>
+          includes(filter.value, field)
+        );
+      }
       if (isArray(filter.value)) {
         return includes(filter.value, item[filter.field]);
       }
@@ -44,25 +57,17 @@ export const filterTabDataByCategory = (
   data: any[], // 原数据 已排序
   pageination: any, // 分页数据
   filters: FilterItem[] // 过滤项
-): { data: any; pageination: any } => {
-  if (!filters.length) {
-    return {
-      data,
-      pageination: {
-        ...pageination,
-        total: data.length,
-        pageIndex: 1,
-      },
-    };
-  }
+): { data: any; pageination: any; tableData: any } => {
   const __data = filterTableData(data, filters);
+  const __pageination = {
+    ...pageination,
+    total: __data.length,
+    pageIndex: 1,
+  };
   return {
     data: __data,
-    pageination: {
-      ...pageination,
-      total: __data.length,
-      pageIndex: 1,
-    },
+    tableData: getTabelData(__data, pageination),
+    pageination: __pageination,
   };
 };
 

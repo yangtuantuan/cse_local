@@ -33,8 +33,14 @@
                       [value]="rowItem"
                     ></d-radio>
                   </td>
-                  <td dTableCell *ngFor="let colOption of columns">
-                    {{ rowItem[colOption.field] }}
+                  <td dTableCell field="serviceName">
+                    {{ rowItem.serviceName }}
+                  </td>
+                  <td dTableCell field="appId">
+                    {{ rowItem.appId }}
+                  </td>
+                  <td dTableCell field="enviroment">
+                    {{ rowItem.enviroment | EnvironmentPipe }}
                   </td>
                 </tr>
               </ng-template>

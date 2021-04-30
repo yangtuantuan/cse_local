@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { cloneDeep, includes, isArray, isMatch, map, uniqBy } from 'lodash';
+import { ICategorySearchTagItem } from 'ng-devui';
 import {
   DataTableComponent,
   TableCheckOptions,
@@ -108,7 +109,7 @@ export class ServiceListComponent implements OnInit {
   };
 
   // todo ui框架问题设置为any解决
-  category: any = [
+  category: Array<ICategorySearchTagItem> | any = [
     {
       field: 'serviceName',
       label: '名称',
@@ -138,8 +139,7 @@ export class ServiceListComponent implements OnInit {
   }
 
   initData(): void {
-    this.basicDataSource = [];
-    this.pager.total = 0;
+    this.dataSource = [];
     this.service.getServiceByGovern().subscribe(
       (data) => {
         this.basicDataSource = (data?.allServicesDetail || []).map(
@@ -264,13 +264,13 @@ export class ServiceListComponent implements OnInit {
   }
 
   onSelectedTagsChange(e: FilterItem[]): void {
-    const { data, pageination } = filterTabDataByCategory(
+    const { data, tableData, pageination } = filterTabDataByCategory(
       this.basicDataSource,
       this.pager,
       e
     );
     this.pager = pageination;
-    this.dataSource = data;
+    this.dataSource = tableData;
   }
 
   onRefresh(): void {

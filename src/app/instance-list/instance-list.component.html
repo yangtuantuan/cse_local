@@ -25,7 +25,7 @@
       <tr dTableRow>
         <td dTableCell>{{ rowItem.hostName }}</td>
         <td dTableCell>{{ rowItem.status | InstanceStatus }}</td>
-        <td dTableCell>{{ rowItem.environment }}</td>
+        <td dTableCell>{{ rowItem.environment | EnvironmentPipe }}</td>
         <td dTableCell>{{ rowItem.serviceName }}</td>
         <td dTableCell>{{ rowItem.version }}</td>
         <td dTableCell>

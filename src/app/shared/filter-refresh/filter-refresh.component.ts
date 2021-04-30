@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { isArray } from 'lodash';
 import { ICategorySearchTagItem } from 'ng-devui';
@@ -14,6 +15,7 @@ import { FilterItem } from '../toolFunction/tabel.pagination';
   selector: 'app-filter-refresh',
   templateUrl: './filter-refresh.component.html',
   styleUrls: ['./filter-refresh.component.less'],
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class FilterRefreshComponent implements OnInit {
   @Input() category!: ICategorySearchTagItem[];

@@ -72,7 +72,7 @@ export class ServiceService {
       (res) => {
         const result = res.allServicesDetail.reduce(
           (list: any[], item: any) => {
-            if (item.instances.length) {
+            if (item.instances?.length) {
               item.instances.forEach((instance: any) => {
                 instance.serviceName = item.microService.serviceName;
                 instance.environment = item.microService.environment || '';
