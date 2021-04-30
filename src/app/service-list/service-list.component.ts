@@ -1,19 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { cloneDeep, includes, isArray, isMatch, map, uniqBy } from 'lodash';
+import { cloneDeep, map, uniqBy } from 'lodash';
 import { ICategorySearchTagItem } from 'ng-devui';
 import {
   DataTableComponent,
   TableCheckOptions,
   TableWidthConfig,
 } from 'ng-devui/data-table';
-import { DialogService, ModalService } from 'ng-devui/modal';
+import { ModalService } from 'ng-devui/modal';
 import { envOptions } from 'src/config/global.config';
 import { ServiceService } from '../../common/service.service';
 import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
 import {
   FilterItem,
   filterTabDataByCategory,
-  filterTableData,
   getTabelData,
 } from '../shared/toolFunction/tabel.pagination';
 import { CreateComponent } from './modal/create/create.component';
@@ -26,7 +25,6 @@ import { DeleteComponent } from './modal/delete/delete.component';
 })
 export class ServiceListComponent implements OnInit {
   constructor(
-    private dialogService: DialogService,
     private modalService: ModalService,
     private service: ServiceService
   ) {}
@@ -66,10 +64,6 @@ export class ServiceListComponent implements OnInit {
 
   tableWidthConfig: TableWidthConfig[] = [
     {
-      field: 'checkbox',
-      width: '50px',
-    },
-    {
       field: 'name',
       width: '150px',
     },
@@ -91,16 +85,6 @@ export class ServiceListComponent implements OnInit {
     },
   ];
   private totalDataChecked = false;
-  checkOptions: TableCheckOptions[] = [
-    {
-      label: '全选所有数据',
-      onChecked: this.checkTotalData.bind(this),
-    },
-    {
-      label: '全选当前页数据',
-      onChecked: this.checkPageData.bind(this),
-    },
-  ];
   pager = {
     total: 0,
     pageIndex: 1,
@@ -144,6 +128,9 @@ export class ServiceListComponent implements OnInit {
       (data) => {
         this.basicDataSource = (data?.allServicesDetail || []).map(
           (item: any) => {
+            if (!item.microService?.environment) {
+              item.microService.environment = '<空>';
+            }
             return item.microService;
           }
         );
@@ -180,13 +167,13 @@ export class ServiceListComponent implements OnInit {
     });
   }
 
-  public deleteItem(rowItem?: { serviceName: string }): void {
+  public deleteItem(rowItems: any): void {
     const result = this.modalService.open({
       id: 'delte-service',
       width: '750px',
       component: DeleteComponent,
       data: {
-        services: [rowItem],
+        services: rowItems,
         onCancel: (data?: any) => {
           if (data) {
             this.initData();
@@ -195,36 +182,6 @@ export class ServiceListComponent implements OnInit {
         },
       },
     });
-  }
-
-  onRowCheckChange(
-    checked: any,
-    rowIndex: number,
-    nestedIndex: string,
-    rowItem: any
-  ): void {
-    rowItem.$checked = checked;
-    rowItem.$halfChecked = false;
-    this.datatable.setRowCheckStatus({
-      rowIndex,
-      nestedIndex,
-      rowItem,
-      checked,
-    });
-  }
-
-  private checkTotalData(): void {
-    this.datatable.setTableCheckStatus({
-      pageAllChecked: true,
-    });
-    this.totalDataChecked = true;
-  }
-
-  private checkPageData(): void {
-    this.datatable.setTableCheckStatus({
-      pageAllChecked: true,
-    });
-    this.totalDataChecked = false;
   }
 
   public onPaginationChange(pageIndex: number, pageSize: number): void {

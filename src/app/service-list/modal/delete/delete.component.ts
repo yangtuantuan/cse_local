@@ -9,7 +9,7 @@ import { ServiceService } from '../../../../common/service.service';
 })
 export class DeleteComponent implements OnInit {
   @Input() data!: {
-    services: any[];
+    services: any;
     onCancel: (data?: any) => void;
   };
 
@@ -20,10 +20,7 @@ export class DeleteComponent implements OnInit {
   ngOnInit(): void {}
 
   onConfirm(): void {
-    const serviceList = this.data.services.map((item) => {
-      return this.service.deleteService(item.serviceId);
-    });
-    zip(...serviceList).subscribe(
+    this.service.deleteService(this.data.services.serviceId).subscribe(
       (res) => {
         this.data.onCancel(true);
       },

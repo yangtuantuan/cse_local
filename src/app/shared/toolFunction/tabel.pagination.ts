@@ -58,16 +58,27 @@ export const filterTabDataByCategory = (
   pageination: any, // 分页数据
   filters: FilterItem[] // 过滤项
 ): { data: any; pageination: any; tableData: any } => {
-  const __data = filterTableData(data, filters);
-  const __pageination = {
-    ...pageination,
-    total: __data.length,
-    pageIndex: 1,
-  };
+  if (filters?.length) {
+    const __data = filterTableData(data, filters);
+    const __pageination = {
+      ...pageination,
+      total: __data.length,
+      pageIndex: 1,
+    };
+    return {
+      data,
+      tableData: getTabelData(__data, __pageination),
+      pageination: __pageination,
+    };
+  }
   return {
-    data: __data,
-    tableData: getTabelData(__data, pageination),
-    pageination: __pageination,
+    data,
+    tableData: getTabelData(data, pageination),
+    pageination: {
+      ...pageination,
+      total: data.length,
+      pageIndex: 1,
+    },
   };
 };
 

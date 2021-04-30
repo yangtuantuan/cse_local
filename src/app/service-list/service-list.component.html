@@ -1,11 +1,10 @@
-<div class="title">服务列表</div>
-<div class="btn-group">
-  <d-button icon="icon-add" bsStyle="primary" (click)="onCreateService()">
-    创建微服务
-  </d-button>
-  <d-button icon="icon-delete" bsStyle="common" (click)="deleteItem()">
-    删除
-  </d-button>
+<div class="title">
+  <div class="label">服务列表</div>
+  <div class="btn-group">
+    <d-button icon="icon-add" bsStyle="primary" (click)="onCreateService()">
+      创建微服务
+    </d-button>
+  </div>
 </div>
 <div>
   <app-filter-refresh
@@ -19,7 +18,7 @@
     [tableWidthConfig]="tableWidthConfig"
     [headerBg]="true"
   >
-    <thead dTableHead [checkable]="true" [checkOptions]="checkOptions">
+    <thead dTableHead [checkable]="false">
       <tr dTableRow>
         <th dHeadCell width="150px">Name</th>
         <th dHeadCell *ngFor="let colOption of columns">
@@ -35,16 +34,6 @@
         let-nestedIndex="nestedIndex"
       >
         <tr dTableRow [ngClass]="{ 'table-row-selected': rowItem.$checked }">
-          <td dTableCell class="devui-checkable-cell">
-            <d-checkbox
-              (ngModelChange)="
-                onRowCheckChange($event, rowIndex, nestedIndex, rowItem)
-              "
-              [(ngModel)]="rowItem.$checked"
-              [disabled]="rowItem.$checkDisabled"
-            >
-            </d-checkbox>
-          </td>
           <td dTableCell>
             <a [routerLink]="['/servicedetail', rowItem.serviceId]">
               {{ rowItem.serviceName }}
