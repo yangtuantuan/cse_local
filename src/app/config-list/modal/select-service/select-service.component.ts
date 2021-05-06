@@ -132,16 +132,5 @@ export class SelectServiceComponent implements OnInit {
       pageIndex,
       pageSize,
     });
-    // setTimeout(() => {
-    //   if (this.totalDataChecked) {
-    //     this.datatable.setTableCheckStatus({
-    //       pageAllChecked: true,
-    //     });
-    //   } else {
-    //     this.datatable.setTableCheckStatus({
-    //       pageAllChecked: false,
-    //     });
-    //   }
-    // });
   }
 }

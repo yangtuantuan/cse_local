@@ -42,58 +42,56 @@ export class ConfigListComponent implements OnInit {
     },
   ];
 
-  dataTableOptions = {
-    columns: [
-      {
-        field: 'key',
-        header: '配置项',
-        fieldType: 'text',
-        order: 1,
-      },
-      {
-        field: 'status',
-        header: '状态',
-        fieldType: 'text',
-        order: 2,
-      },
-      {
-        field: 'lables',
-        header: '标签',
-        fieldType: 'text',
-        order: 3,
-      },
-      {
-        field: 'type',
-        header: '配置项类型',
-        fieldType: 'text',
-        order: 4,
-      },
-      {
-        field: 'value_type',
-        header: '配置格式',
-        fieldType: 'text',
-        order: 5,
-      },
-      {
-        field: 'update_revision',
-        header: '修订版本',
-        fieldType: 'number',
-        order: 6,
-      },
-      {
-        field: 'update_time',
-        header: '更新时间',
-        fieldType: 'date',
-        order: 7,
-      },
-      {
-        field: '',
-        header: '操作项',
-        fieldType: 'date',
-        order: 7,
-      },
-    ],
-  };
+  columns = [
+    {
+      field: 'key',
+      header: '配置项',
+      fieldType: 'text',
+      width: '100px',
+    },
+    {
+      field: 'status',
+      header: '状态',
+      fieldType: 'text',
+      width: '50px',
+    },
+    {
+      field: 'lables',
+      header: '标签',
+      fieldType: 'text',
+      width: '200px',
+    },
+    {
+      field: 'type',
+      header: '配置项类型',
+      fieldType: 'text',
+      width: '100px',
+    },
+    {
+      field: 'value_type',
+      header: '配置格式',
+      fieldType: 'text',
+      width: '100px',
+    },
+    {
+      field: 'update_revision',
+      header: '修订版本',
+      fieldType: 'number',
+      width: '100px',
+    },
+    {
+      field: 'update_time',
+      header: '更新时间',
+      fieldType: 'date',
+      width: '200px',
+    },
+    {
+      field: '',
+      header: '操作项',
+      fieldType: 'date',
+      width: '100px',
+    },
+  ];
 
   pager = {
     total: 0,
@@ -109,15 +107,18 @@ export class ConfigListComponent implements OnInit {
   onRefresh(): void {
     this.service.getAllKies().subscribe(
       (data) => {
-        this.basicDataSource = data.data.map((item) => {
-          item.labels_format = getTagsByObj(item.labels);
-          return item;
-        });
+        this.basicDataSource = data.data
+          .map((item) => {
+            item.labels_format = getTagsByObj(item.labels);
+            return item;
+          })
+          .sort((a, b) => b.update_time - a.update_time);
         this.pager.total = this.basicDataSource.length;
         this.dataSource = getTabelData(this.basicDataSource, this.pager);
         this.category[1].options = uniqBy(
           map(this.basicDataSource, (item: any) => ({
-            label: item.status,
+            id: item.status,
+            label: item.status === 'enabled' ? '启用' : '禁用',
           })),
           'label'
         );

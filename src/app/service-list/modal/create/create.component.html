@@ -2,21 +2,23 @@
   <h2>创建微服务</h2>
 
   <div class="form">
-    <form dForm ngForm #form>
+    <form
+      dForm
+      ngForm
+      [formGroup]="formGroup"
+      #form="dValidateRules"
+      [dValidateRules]="formRules.rule"
+    >
       <d-form-item>
         <d-form-label [required]="true">微服名称</d-form-label>
         <d-form-control>
           <input
             dTextInput
             placeholder="数字字母开头结尾，例如：myServiceName"
-            [(ngModel)]="serviceName"
-            [ngModelOptions]="{ standalone: true }"
-            [dValidateRules]="[
-              { required: true },
-              { whitespace: true },
-              { minlength: 1 },
-              { maxlength: 128 },
-            ]"
+            autocomplete="off"
+            name="serviceName"
+            formControlName="serviceName"
+            [dValidateRules]="formRules.usernameRules"
           />
         </d-form-control>
       </d-form-item>
@@ -26,14 +28,10 @@
           <input
             dTextInput
             placeholder="数字字母开头结尾，例如：myAppId"
-            [(ngModel)]="appId"
-            [ngModelOptions]="{ standalone: true }"
-            [dValidateRules]="[
-              { required: true },
-              { whitespace: true },
-              { minlength: 1 },
-              { maxlength: 128 },
-            ]"
+            autocomplete="off"
+            name="appId"
+            formControlName="appId"
+            [dValidateRules]="formRules.appIdRules"
           />
         </d-form-control>
       </d-form-item>
@@ -42,25 +40,11 @@
         <d-form-control>
           <input
             dTextInput
-            [(ngModel)]="version"
-            [ngModelOptions]="{ standalone: true }"
-            [dValidateRules]="[
-              { required: true },
-              { whitespace: true },
-              { minlength: 3 },
-              { maxlength: 46 },
-              {
-                pattern: versionReg,
-                message: {
-                  'zh-cn':
-                    'X.Y.Z, X.Y.Z.B 型版本号, X、Y、Z 为数字且范围在0-32767, 长度为3-46个字符',
-                  'en-us':
-                    'The value cannot contain characters except uppercase and lowercase letters.',
-                  default:
-                    'X.Y.Z, X.Y.Z.B 型版本号, X、Y、Z 为数字且范围在0-32767, 长度为3-46个字符'
-                }
-              }
-            ]"
+            autocomplete="off"
+            placeholder="0.0.1"
+            name="version"
+            formControlName="version"
+            [dValidateRules]="formRules.versionRules"
           />
         </d-form-control>
       </d-form-item>
@@ -70,9 +54,11 @@
           <d-select
             class="w-150"
             [filterKey]="'label'"
+            autocomplete="off"
             [options]="envOpetions"
-            [(ngModel)]="environment"
-            [ngModelOptions]="{ standalone: true }"
+            name="environment"
+            formControlName="environment"
+            [dValidateRules]="formRules.environmentRules"
             size="sm"
           ></d-select>
         </d-form-control>
@@ -80,15 +66,30 @@
       <d-form-item>
         <d-form-label [required]="false">描述</d-form-label>
         <d-form-control>
-          <textarea dTextarea placeholder="Please Enter"></textarea>
+          <textarea
+            dTextarea
+            placeholder="Please Enter"
+            autocomplete="off"
+            name="description"
+            formControlName="description"
+            [dValidateRules]="formRules.descriptionRules"
+          ></textarea>
         </d-form-control>
       </d-form-item>
     </form>
   </div>
   <div class="footer">
-    <d-button bsStyle="danger" (click)="onCreateBtn()">确定</d-button>
-    <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg"
-      >取消</d-button
+    <d-button
+      bsStyle="danger"
+      [disabled]="!!form.errorMessage"
+      (click)="onCreateBtn()"
+      dTooltip
+      [content]="form.errorMessage"
     >
+      确定
+    </d-button>
+    <d-button bsStyle="common" (click)="onCancel()" class="cse-mg-left-lg">
+      取消
+    </d-button>
   </div>
 </div>

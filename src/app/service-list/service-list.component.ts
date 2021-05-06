@@ -126,14 +126,14 @@ export class ServiceListComponent implements OnInit {
     this.dataSource = [];
     this.service.getServiceByGovern().subscribe(
       (data) => {
-        this.basicDataSource = (data?.allServicesDetail || []).map(
-          (item: any) => {
+        this.basicDataSource = (data?.allServicesDetail || [])
+          .map((item: any) => {
             if (!item.microService?.environment) {
               item.microService.environment = '<空>';
             }
             return item.microService;
-          }
-        );
+          })
+          .sort((a: any, b: any) => b.modTimestamp - a.modTimestamp);
         this.pager.total = this.basicDataSource.length;
         this.dataSource = getTabelData(this.basicDataSource, this.pager);
         this.category[2].options = uniqBy(

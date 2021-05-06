@@ -12,6 +12,7 @@ import {
   TagsModule,
   TextareaModule,
   ToggleModule,
+  TooltipModule,
 } from 'ng-devui';
 import { DataTableModule } from 'ng-devui/data-table';
 import { CheckBoxModule } from 'ng-devui/checkbox';
@@ -24,7 +25,7 @@ import { EnvironmentPipe } from './pipe/environment.pipe';
 import { AutoHidePaginationDirective } from './derective/auto-hide-pagination.derective';
 import { FilterRefreshModule } from './filter-refresh/filter-refresh.module';
 
-const devUIModule = [
+const devUIModules = [
   CategorySearchModule,
   CheckBoxModule,
   DevUIModule,
@@ -37,6 +38,7 @@ const devUIModule = [
   ToggleModule,
   SelectModule,
   TextareaModule,
+  TooltipModule,
 ];
 const angularModule = [
   CommonModule,
@@ -54,13 +56,13 @@ const derective = [AutoHidePaginationDirective];
 @NgModule({
   declarations: [...pipes, ...derective],
   imports: [
-    ...devUIModule,
+    ...devUIModules,
     ...angularModule,
     ...cusModule,
     MonacoEditorModule.forRoot(),
   ],
   exports: [
-    ...devUIModule,
+    ...devUIModules,
     ...angularModule,
     ...cusModule,
     ...pipes,

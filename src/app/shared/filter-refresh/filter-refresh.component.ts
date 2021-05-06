@@ -34,7 +34,7 @@ export class FilterRefreshComponent implements OnInit {
       return {
         field: item.field,
         value: isArray(item.value.value)
-          ? item.value.value.map((j: any) => j.label)
+          ? item.value.value.map((j: any) => j.id || j.label)
           : item.value.value,
       };
     });

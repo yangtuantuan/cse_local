@@ -79,7 +79,7 @@ export class InstanceListComponent implements OnInit {
       this.service.getInstancesbyServiceId(serviceId).subscribe(
         (res) => {
           this.basicDataSource = res.instances;
-          this.pager.total = res.instances.length;
+          this.pager.total = res.instances?.length;
           this.dataSource = getTabelData(this.basicDataSource, this.pager);
         },
         (err) => {

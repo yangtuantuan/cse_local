@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormLayout, ModalService } from 'ng-devui';
+import { DValidateRules, FormLayout, ModalService } from 'ng-devui';
 import { EditorComponent } from 'ngx-monaco-editor';
 import { ConfigService, getTagsByObj } from '../../../../common/config.service';
 import { SelectAppComponent } from '../../modal/select-app/select-app.component';
@@ -36,6 +37,21 @@ export class ConfigCreateComponent implements OnInit {
     });
   }
 
+  formGroup = new FormGroup({
+    code: new FormControl(''),
+    configName: new FormControl(''),
+  });
+
+  formRules: { [key: string]: DValidateRules } = {
+    rule: { message: 'The form verification failed, please check.' },
+    codeRules: {
+      validators: [{ required: true }, { whitespace: true }],
+    },
+    appId: {
+      validators: [{ required: true }],
+    },
+  };
+
   type!: 'create' | 'eidt'; // 编辑 创建
   configType!: 'app' | 'service' | 'custom'; // custom app service
   kvId!: string;
@@ -69,10 +85,8 @@ export class ConfigCreateComponent implements OnInit {
   ];
   configFormatId: string = defaultConfig.language;
   editorOptions = defaultConfig;
-  code!: string; // 配置
   status: 'enabled' | 'disabled' = 'enabled'; // 状态
   tags: string[] = []; // 标签
-  configName!: string; // 配置项
 
   appId = ''; // 应用名称
   serviceId = ''; // 微服务id
@@ -87,8 +101,8 @@ export class ConfigCreateComponent implements OnInit {
       this.service.getKie(this.kvId).subscribe(
         (res) => {
           this.tags = getTagsByObj(res.labels || {});
-          this.configName = res.key;
-          this.code = res.value;
+          this.formGroup.controls.configName.setValue(res.key);
+          this.formGroup.controls.code.setValue(res.value);
           this.status = res.status;
           this.configFormatItems = JSON.parse(
             JSON.stringify(this.configFormatItems)
@@ -172,14 +186,14 @@ export class ConfigCreateComponent implements OnInit {
 
   onSubmit(): void {
     const param = {
-      key: this.configName,
+      key: this.formGroup.controls.configName.value,
       labels: this.tags.reduce((pre: any, tag) => {
         const key = tag.split('=')[0];
         const value = tag.split('=')[1];
         pre[key] = value;
         return pre;
       }, {}),
-      value: this.code,
+      value: this.formGroup.controls.code.value,
       value_type: this.editorOptions.language,
       status: this.status,
     };

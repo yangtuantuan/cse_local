@@ -18,10 +18,15 @@
   </app-filter-refresh>
 </div>
 
-<d-data-table [dataSource]="dataSource" [scrollable]="true" [type]="'striped'">
+<d-data-table
+  [dataSource]="dataSource"
+  [scrollable]="true"
+  [type]="'striped'"
+  [tableWidthConfig]="columns"
+>
   <thead dTableHead>
     <tr dTableRow>
-      <th dHeadCell *ngFor="let colOption of dataTableOptions.columns">
+      <th dHeadCell *ngFor="let colOption of columns">
         {{ colOption.header }}
       </th>
     </tr>
@@ -33,6 +38,7 @@
         <td dTableCell>{{ rowItem.status | configStatusPipe }}</td>
         <td dTableCell>
           <d-tag
+            class="cse-mg-right-xs"
             *ngFor="let tag of rowItem.labels_format; let i = index"
             [tag]="tag"
           ></d-tag>

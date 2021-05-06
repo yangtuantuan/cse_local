@@ -1,14 +1,6 @@
 // tslint:disable:variable-name
 
-import {
-  cloneDeep,
-  every,
-  includes,
-  isArray,
-  isMatch,
-  reduce,
-  some,
-} from 'lodash';
+import { cloneDeep, every, includes, isArray, some } from 'lodash';
 
 export const getTabelData = (
   data: any[], // 原数据 已排序
