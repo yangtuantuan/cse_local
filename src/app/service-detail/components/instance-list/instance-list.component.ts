@@ -44,12 +44,6 @@ export class InstanceListComponent implements OnInit {
       width: '150px',
     },
     {
-      field: 'az',
-      header: '可用区',
-      fieldType: 'text',
-      width: '150px',
-    },
-    {
       field: 'endpoints',
       header: 'Endpoints',
       fieldType: 'text',

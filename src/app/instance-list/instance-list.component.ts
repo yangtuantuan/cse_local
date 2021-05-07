@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService, ModalService, TableWidthConfig } from 'ng-devui';
 import { ServiceService } from 'src/common/service.service';
-import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
 import { ActionItem } from '../shared/action-menu/action-menu.module';
 import { getTabelData } from '../shared/toolFunction/tabel.pagination';
 

@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormLayout, ModalService } from 'ng-devui';
 import { getTagsByObj } from 'src/common/config.service';
 import { ServiceService } from '../../common/service.service';
-import { ManageTagComponent } from '../shared/manage-tag/manage-tag.component';
 
 @Component({
   selector: 'app-service-detail',
@@ -70,22 +69,5 @@ export class ServiceDetailComponent implements OnInit {
 
   activeTabChange(event: any): void {
     console.log('switch to', event);
-  }
-
-  onTags(): void {
-    const results = this.module.open({
-      id: 'tags',
-      component: ManageTagComponent,
-      width: '750px',
-      data: {
-        close: (e?: boolean) => {
-          if (e) {
-            this.initData();
-          }
-          results.modalInstance.hide();
-        },
-        serviceId: this.serivceId,
-      },
-    });
   }
 }

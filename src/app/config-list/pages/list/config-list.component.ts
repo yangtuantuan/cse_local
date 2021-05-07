@@ -74,12 +74,6 @@ export class ConfigListComponent implements OnInit {
       width: '100px',
     },
     {
-      field: 'update_revision',
-      header: '修订版本',
-      fieldType: 'number',
-      width: '100px',
-    },
-    {
       field: 'update_time',
       header: '更新时间',
       fieldType: 'date',

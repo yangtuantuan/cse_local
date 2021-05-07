@@ -1,7 +1,7 @@
 <div class="title">
   <div class="label">服务列表</div>
   <div class="btn-group">
-    <d-button icon="icon-add" bsStyle="primary" (click)="onCreateService()">
+    <d-button icon="icon-add" bsStyle="danger" (click)="onCreateService()">
       创建微服务
     </d-button>
   </div>
@@ -20,11 +20,11 @@
   >
     <thead dTableHead [checkable]="false">
       <tr dTableRow>
-        <th dHeadCell width="150px">Name</th>
+        <th dHeadCell width="150px">服务名称</th>
         <th dHeadCell *ngFor="let colOption of columns">
           {{ colOption.header }}
         </th>
-        <th dHeadCell width="150px">Operation</th>
+        <th dHeadCell width="150px">操作</th>
       </tr>
     </thead>
     <tbody dTableBody>
@@ -52,9 +52,6 @@
             {{ rowItem.timestamp | dDatePipe: "y/M/d HH:mm:ss zzzz" }}
           </td>
           <td dTableCell>
-            <d-button bsStyle="text" (click)="manageTag(rowItem)"
-              >标签管理</d-button
-            >
             <d-button
               bsStyle="text"
               class="cse-mg-left-sm"

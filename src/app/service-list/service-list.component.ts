@@ -1,15 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { cloneDeep, map, uniqBy } from 'lodash';
 import { ICategorySearchTagItem } from 'ng-devui';
-import {
-  DataTableComponent,
-  TableCheckOptions,
-  TableWidthConfig,
-} from 'ng-devui/data-table';
+import { DataTableComponent, TableWidthConfig } from 'ng-devui/data-table';
 import { ModalService } from 'ng-devui/modal';
 import { envOptions } from 'src/config/global.config';
 import { ServiceService } from '../../common/service.service';
-import { ManageTagComponent } from '../shared/manage-tag/manage-tag.module';
 import {
   FilterItem,
   filterTabDataByCategory,
@@ -38,26 +33,26 @@ export class ServiceListComponent implements OnInit {
   columns = [
     {
       field: 'environment',
-      header: 'Environment',
+      header: '环境',
       fieldType: 'text',
       order: 2,
     },
     {
       field: 'version',
-      header: 'Version',
+      header: '版本',
       fieldType: 'text',
       order: 3,
     },
     {
       field: 'appId',
-      header: 'Instances',
+      header: '应用',
       fieldType: 'text',
       order: 4,
     },
     {
       field: 'timestamp',
-      header: 'Create Time',
-      fieldType: 'Date',
+      header: '创建时间',
+      fieldType: 'date',
       order: 5,
     },
   ];
@@ -113,7 +108,7 @@ export class ServiceListComponent implements OnInit {
     },
     {
       field: 'instances',
-      label: 'Instances',
+      label: '应用',
       type: 'textInput',
     },
   ];
@@ -147,24 +142,6 @@ export class ServiceListComponent implements OnInit {
         // todo 提示
       }
     );
-  }
-
-  public manageTag(rowItem: any): void {
-    const results = this.modalService.open({
-      id: 'manageTag',
-      width: '750px',
-      component: ManageTagComponent,
-      backdropCloseable: false,
-      data: {
-        close: (res?: boolean) => {
-          if (res) {
-            this.initData();
-          }
-          results.modalInstance.hide();
-        },
-        serviceId: rowItem.serviceId,
-      },
-    });
   }
 
   public deleteItem(rowItems: any): void {
