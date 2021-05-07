@@ -6,14 +6,14 @@
   [scrollable]="true"
   [type]="'striped'"
   [headerBg]="true"
-  [tableWidthConfig]="tableWidthConfig"
+  [tableWidthConfig]="columns"
 >
   <thead dTableHead>
     <tr dTableRow>
       <th dHeadCell *ngFor="let colOption of columns">
         {{ colOption.header }}
       </th>
-      <th dHeadCell>操作</th>
+      <th dHeadCell [width]="'200px'">操作</th>
     </tr>
   </thead>
   <tbody dTableBody>

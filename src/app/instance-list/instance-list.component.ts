@@ -30,42 +30,36 @@ export class InstanceListComponent implements OnInit {
       field: 'hostName',
       header: '实例名称',
       fieldType: 'text',
-      order: 1,
+      width: '300px',
     },
     {
       field: 'status',
       header: '状态',
       fieldType: 'text',
-      order: 2,
+      width: '100px',
     },
     {
       field: 'environment',
       header: '环境',
       fieldType: 'text',
-      order: 3,
+      width: '100px',
     },
     {
       field: 'serviceName',
       header: '所属服务',
       fieldType: 'text',
-      order: 4,
+      width: '200px',
     },
     {
       field: 'version',
       header: '所属版本',
       fieldType: 'text',
-      order: 5,
+      width: '150px',
     },
     {
       field: 'modTimestamp',
       header: '更新时间',
       fieldType: 'text',
-      order: 6,
-    },
-  ];
-  tableWidthConfig: TableWidthConfig[] = [
-    {
-      field: 'hostName',
       width: '300px',
     },
   ];

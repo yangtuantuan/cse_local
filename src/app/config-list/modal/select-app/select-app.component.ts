@@ -62,7 +62,6 @@ export class SelectAppComponent implements OnInit {
         this.basicDataSource = res;
         this.pager.total = res.length;
         this.dataSource = getTabelData(res, this.pager);
-        console.log(res);
       },
       (err) => {
         this.basicDataSource = [];

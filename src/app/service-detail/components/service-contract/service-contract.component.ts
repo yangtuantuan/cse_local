@@ -34,7 +34,6 @@ export class ServiceContractComponent implements OnInit {
           this.options = res;
           this.selected = res[0];
           this.code = res[0].schema;
-          console.log(res);
         },
         (err) => {
           // todo 提示

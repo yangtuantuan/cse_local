@@ -140,8 +140,6 @@ export class ServiceService {
             consumers: [],
           }
         );
-        console.log(result);
-
         instances$.next(result);
       },
       (err) => {

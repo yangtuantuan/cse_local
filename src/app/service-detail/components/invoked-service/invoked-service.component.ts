@@ -68,7 +68,6 @@ export class InvokedServiceComponent implements OnInit {
       this.service.getDependencies(params).subscribe(
         (res) => {
           this.basicDataSource = res[this.type];
-          console.log(res);
         },
         (err) => {
           // todo 提示

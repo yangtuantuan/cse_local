@@ -212,7 +212,6 @@ export class ConfigCreateComponent implements OnInit {
 
     this.service.postKie(param).subscribe(
       (res) => {
-        console.log(res);
         // todo 提示
         this.cancel();
       },
