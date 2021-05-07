@@ -71,16 +71,6 @@
         </div>
         <div class="u-1-2">
           <d-form-item>
-            <d-form-label> 上线时间 </d-form-label>
-            <d-form-control class="form-control-width">
-              {{
-                serviceData?.modTimestamp | dDatePipe: "y/M/d HH:mm:ss zzzz "
-              }}
-            </d-form-control>
-          </d-form-item>
-        </div>
-        <div class="u-1-2">
-          <d-form-item>
             <d-form-label> 创建时间 </d-form-label>
             <d-form-control class="form-control-width">
               {{ serviceData?.timestamp | dDatePipe: "y/M/d HH:mm:ss zzzz " }}
